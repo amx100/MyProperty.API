@@ -8,6 +8,7 @@ public class TransactionDto
 	public string BuyerAccountId { get; set; } = string.Empty;
 	public string OwnerAccountId { get; set; } = string.Empty;
 	public int PropertyId { get; set; }
+	public string Status { get; set; } = "Pending"; // New property to track transaction status
 }
 
 public class TransactionCreateDto
@@ -17,6 +18,7 @@ public class TransactionCreateDto
 	public string BuyerAccountId { get; set; } = string.Empty;
 	public string OwnerAccountId { get; set; } = string.Empty;
 	public int PropertyId { get; set; }
+	public string Status { get; set; } = "Pending"; // New property to initialize transaction status
 }
 
 public class TransactionUpdateDto
@@ -27,4 +29,5 @@ public class TransactionUpdateDto
 	public string BuyerAccountId { get; set; } = string.Empty;
 	public string OwnerAccountId { get; set; } = string.Empty;
 	public int PropertyId { get; set; }
+	public string Status { get; set; } = "Pending"; // New property to update transaction status
 }

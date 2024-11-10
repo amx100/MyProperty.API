@@ -95,19 +95,30 @@ namespace Services
 			}
 		}
 
-		public async Task Delete(int imageId, CancellationToken cancellationToken = default)
+		public async Task<GeneralResponseDto> Delete(int imageId, CancellationToken cancellationToken = default)
 		{
 			var image = await repositoryManager.PropertyImageRepository.GetById(imageId, cancellationToken);
 
 			if (image == null)
 			{
-				throw new Exception("Image not found");
+				return new GeneralResponseDto
+				{
+					IsSuccess = false,
+					Message = "Slika nije pronađena."
+				};
 			}
 
-			// Call the Delete method without needing propertyId
 			repositoryManager.PropertyImageRepository.DeleteImage(image, cancellationToken);
 			await repositoryManager.UnitOfWork.SaveChangesAsync(cancellationToken);
+
+			return new GeneralResponseDto
+			{
+				IsSuccess = true,
+				Message = "Slika je uspešno obrisana."
+			};
 		}
+
+
 
 
 

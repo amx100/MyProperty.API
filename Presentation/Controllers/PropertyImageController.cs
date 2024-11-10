@@ -44,9 +44,17 @@ namespace Presentation.Controllers
 		[HttpDelete("delete/{imageId}")]
 		public async Task<IActionResult> DeleteImage(int imageId, CancellationToken cancellationToken)
 		{
-			await serviceManager.PropertyImageService.Delete(imageId, cancellationToken);
-			return NoContent();
+			var response = await serviceManager.PropertyImageService.Delete(imageId, cancellationToken);
+
+			if (!response.IsSuccess)
+			{
+				return NotFound(new { Message = response.Message }); 
+			}
+
+			return Ok(new { Message = response.Message }); 
 		}
+
+
 
 	}
 }
