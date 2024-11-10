@@ -19,94 +19,7 @@ namespace Persistence.Migrations
                 .HasAnnotation("ProductVersion", "8.0.10")
                 .HasAnnotation("Relational:MaxIdentifierLength", 64);
 
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    b.Property<string>("ClaimType")
-                        .HasColumnType("longtext");
-
-                    b.Property<string>("ClaimValue")
-                        .HasColumnType("longtext");
-
-                    b.Property<string>("RoleId")
-                        .IsRequired()
-                        .HasColumnType("varchar(255)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("RoleId");
-
-                    b.ToTable("AspNetRoleClaims", (string)null);
-                });
-
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    b.Property<string>("ClaimType")
-                        .HasColumnType("longtext");
-
-                    b.Property<string>("ClaimValue")
-                        .HasColumnType("longtext");
-
-                    b.Property<string>("UserId")
-                        .IsRequired()
-                        .HasColumnType("varchar(255)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("UserId");
-
-                    b.ToTable("AspNetUserClaims", (string)null);
-                });
-
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<string>", b =>
-                {
-                    b.Property<string>("LoginProvider")
-                        .HasColumnType("varchar(255)");
-
-                    b.Property<string>("ProviderKey")
-                        .HasColumnType("varchar(255)");
-
-                    b.Property<string>("ProviderDisplayName")
-                        .HasColumnType("longtext");
-
-                    b.Property<string>("UserId")
-                        .IsRequired()
-                        .HasColumnType("varchar(255)");
-
-                    b.HasKey("LoginProvider", "ProviderKey");
-
-                    b.HasIndex("UserId");
-
-                    b.ToTable("AspNetUserLogins", (string)null);
-                });
-
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>
-                {
-                    b.Property<string>("UserId")
-                        .HasColumnType("varchar(255)");
-
-                    b.Property<string>("LoginProvider")
-                        .HasColumnType("varchar(255)");
-
-                    b.Property<string>("Name")
-                        .HasColumnType("varchar(255)");
-
-                    b.Property<string>("Value")
-                        .HasColumnType("longtext");
-
-                    b.HasKey("UserId", "LoginProvider", "Name");
-
-                    b.ToTable("AspNetUserTokens", (string)null);
-                });
-
-            modelBuilder.Entity("MyProperty.API.Core.Domain.Entities.Account", b =>
+            modelBuilder.Entity("Domain.Entities.Account", b =>
                 {
                     b.Property<string>("Id")
                         .HasColumnType("varchar(255)");
@@ -197,7 +110,7 @@ namespace Persistence.Migrations
                         {
                             Id = "595af844-b3f7-4d70-87ca-eb9c08a2368a",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "bc65d830-65f7-44a7-9160-c492d542b1ff",
+                            ConcurrencyStamp = "a2b7bff5-21b2-4af0-888a-139c2c5f43d9",
                             Email = "admin@test.com",
                             EmailConfirmed = true,
                             FirstName = "Admin",
@@ -208,7 +121,7 @@ namespace Persistence.Migrations
                             PhoneNumberConfirmed = false,
                             RefreshToken = "",
                             RefreshTokenExpiryTime = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            SecurityStamp = "1e9baf14-ee95-4a5a-bc7b-4530e7e7752b",
+                            SecurityStamp = "0a2c7b5d-a4da-458c-a0ca-dff4824ba23d",
                             TwoFactorEnabled = false,
                             UserName = "admin@test.com"
                         },
@@ -216,7 +129,7 @@ namespace Persistence.Migrations
                         {
                             Id = "4334dd38-cdd9-4ba8-99c6-856220356d4a",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "23901c30-054e-40e6-bec8-f92c902d4362",
+                            ConcurrencyStamp = "a1a1d82a-8ae6-480a-9f2f-e66037ba36a1",
                             Email = "user@test.com",
                             EmailConfirmed = true,
                             FirstName = "User",
@@ -227,13 +140,51 @@ namespace Persistence.Migrations
                             PhoneNumberConfirmed = false,
                             RefreshToken = "",
                             RefreshTokenExpiryTime = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            SecurityStamp = "e91feec8-810b-4c43-bfb9-48b31dd174f9",
+                            SecurityStamp = "2854b1d2-69da-48f8-af81-fdcdd6cd4afb",
                             TwoFactorEnabled = false,
                             UserName = "user@test.com"
+                        },
+                        new
+                        {
+                            Id = "4cda5ea1-47a4-4383-9a6c-b581d13cc961",
+                            AccessFailedCount = 0,
+                            ConcurrencyStamp = "5175d4aa-f154-471b-957a-a8f9b01ac828",
+                            Email = "owner@test.com",
+                            EmailConfirmed = true,
+                            FirstName = "Owner",
+                            LastName = "Owner",
+                            LockoutEnabled = false,
+                            NormalizedEmail = "OWNER@TEST.COM",
+                            NormalizedUserName = "OWNER@TEST.COM",
+                            PhoneNumberConfirmed = false,
+                            RefreshToken = "",
+                            RefreshTokenExpiryTime = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SecurityStamp = "386ec5cc-9a46-4522-86cc-47326bb961fe",
+                            TwoFactorEnabled = false,
+                            UserName = "owner@test.com"
+                        },
+                        new
+                        {
+                            Id = "7ada92d0-de96-45f7-a0f8-dafba1830724",
+                            AccessFailedCount = 0,
+                            ConcurrencyStamp = "eb16ad9b-7025-4035-9fd6-a688e21b2868",
+                            Email = "buyer@test.com",
+                            EmailConfirmed = true,
+                            FirstName = "Buyer",
+                            LastName = "Buyer",
+                            LockoutEnabled = false,
+                            NormalizedEmail = "BUYER@TEST.COM",
+                            NormalizedUserName = "BUYER@TEST.COM",
+                            PhoneNumberConfirmed = false,
+                            RefreshToken = "",
+                            RefreshTokenExpiryTime = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SecurityStamp = "159183e0-1901-45f8-87aa-3b88d21544cc",
+                            TwoFactorEnabled = false,
+                            UserName = "buyer@test.com"
                         });
                 });
 
-            modelBuilder.Entity("MyProperty.API.Core.Domain.Entities.Account+AccountRole", b =>
+            modelBuilder.Entity("Domain.Entities.AccountRole", b =>
                 {
                     b.Property<string>("Id")
                         .HasColumnType("varchar(255)");
@@ -270,7 +221,106 @@ namespace Persistence.Migrations
                             Id = "2",
                             Name = "User",
                             NormalizedName = "USER"
+                        },
+                        new
+                        {
+                            Id = "3",
+                            Name = "Owner",
+                            NormalizedName = "OWNER"
+                        },
+                        new
+                        {
+                            Id = "4",
+                            Name = "Buyer",
+                            NormalizedName = "BUYER"
                         });
+                });
+
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    b.Property<string>("ClaimType")
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("ClaimValue")
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("RoleId")
+                        .IsRequired()
+                        .HasColumnType("varchar(255)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("RoleId");
+
+                    b.ToTable("AspNetRoleClaims", (string)null);
+                });
+
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    b.Property<string>("ClaimType")
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("ClaimValue")
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasColumnType("varchar(255)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("AspNetUserClaims", (string)null);
+                });
+
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<string>", b =>
+                {
+                    b.Property<string>("LoginProvider")
+                        .HasColumnType("varchar(255)");
+
+                    b.Property<string>("ProviderKey")
+                        .HasColumnType("varchar(255)");
+
+                    b.Property<string>("ProviderDisplayName")
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasColumnType("varchar(255)");
+
+                    b.HasKey("LoginProvider", "ProviderKey");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("AspNetUserLogins", (string)null);
+                });
+
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>
+                {
+                    b.Property<string>("UserId")
+                        .HasColumnType("varchar(255)");
+
+                    b.Property<string>("LoginProvider")
+                        .HasColumnType("varchar(255)");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("varchar(255)");
+
+                    b.Property<string>("Value")
+                        .HasColumnType("longtext");
+
+                    b.HasKey("UserId", "LoginProvider", "Name");
+
+                    b.ToTable("AspNetUserTokens", (string)null);
                 });
 
             modelBuilder.Entity("MyProperty.API.Core.Domain.Entities.JointTable.AccountIdentityUserRole", b =>
@@ -297,6 +347,16 @@ namespace Persistence.Migrations
                         {
                             UserId = "4334dd38-cdd9-4ba8-99c6-856220356d4a",
                             RoleId = "2"
+                        },
+                        new
+                        {
+                            UserId = "4cda5ea1-47a4-4383-9a6c-b581d13cc961",
+                            RoleId = "3"
+                        },
+                        new
+                        {
+                            UserId = "7ada92d0-de96-45f7-a0f8-dafba1830724",
+                            RoleId = "4"
                         });
                 });
 
@@ -425,7 +485,7 @@ namespace Persistence.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
                 {
-                    b.HasOne("MyProperty.API.Core.Domain.Entities.Account+AccountRole", null)
+                    b.HasOne("Domain.Entities.AccountRole", null)
                         .WithMany()
                         .HasForeignKey("RoleId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -434,7 +494,7 @@ namespace Persistence.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
                 {
-                    b.HasOne("MyProperty.API.Core.Domain.Entities.Account", null)
+                    b.HasOne("Domain.Entities.Account", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -443,7 +503,7 @@ namespace Persistence.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<string>", b =>
                 {
-                    b.HasOne("MyProperty.API.Core.Domain.Entities.Account", null)
+                    b.HasOne("Domain.Entities.Account", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -452,7 +512,7 @@ namespace Persistence.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>
                 {
-                    b.HasOne("MyProperty.API.Core.Domain.Entities.Account", null)
+                    b.HasOne("Domain.Entities.Account", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -461,13 +521,13 @@ namespace Persistence.Migrations
 
             modelBuilder.Entity("MyProperty.API.Core.Domain.Entities.JointTable.AccountIdentityUserRole", b =>
                 {
-                    b.HasOne("MyProperty.API.Core.Domain.Entities.Account+AccountRole", "Role")
+                    b.HasOne("Domain.Entities.AccountRole", "Role")
                         .WithMany("Roles")
                         .HasForeignKey("RoleId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("MyProperty.API.Core.Domain.Entities.Account", "User")
+                    b.HasOne("Domain.Entities.Account", "User")
                         .WithMany("Roles")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -490,7 +550,7 @@ namespace Persistence.Migrations
 
             modelBuilder.Entity("MyProperty.API.Core.Domain.Entities.Reservation", b =>
                 {
-                    b.HasOne("MyProperty.API.Core.Domain.Entities.Account", "User")
+                    b.HasOne("Domain.Entities.Account", "User")
                         .WithMany()
                         .HasForeignKey("AccountId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -509,13 +569,13 @@ namespace Persistence.Migrations
 
             modelBuilder.Entity("MyProperty.API.Core.Domain.Entities.Transaction", b =>
                 {
-                    b.HasOne("MyProperty.API.Core.Domain.Entities.Account", "Buyer")
+                    b.HasOne("Domain.Entities.Account", "Buyer")
                         .WithMany()
                         .HasForeignKey("BuyerId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("MyProperty.API.Core.Domain.Entities.Account", "Owner")
+                    b.HasOne("Domain.Entities.Account", "Owner")
                         .WithMany()
                         .HasForeignKey("OwnerId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -534,12 +594,12 @@ namespace Persistence.Migrations
                     b.Navigation("Property");
                 });
 
-            modelBuilder.Entity("MyProperty.API.Core.Domain.Entities.Account", b =>
+            modelBuilder.Entity("Domain.Entities.Account", b =>
                 {
                     b.Navigation("Roles");
                 });
 
-            modelBuilder.Entity("MyProperty.API.Core.Domain.Entities.Account+AccountRole", b =>
+            modelBuilder.Entity("Domain.Entities.AccountRole", b =>
                 {
                     b.Navigation("Roles");
                 });

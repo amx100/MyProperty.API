@@ -1,4 +1,6 @@
-﻿namespace MyProperty.API.Core.Domain.Entities
+﻿using Domain.Entities;
+
+namespace MyProperty.API.Core.Domain.Entities
 {
 	public class Reservation
 	{
