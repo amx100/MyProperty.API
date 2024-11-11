@@ -17,7 +17,7 @@ namespace Presentation.Controllers
 			return Ok(response);
 		}
 
-		[Authorize(Roles = "Admin")]
+	
 		[HttpDelete("delete/{reservationId}")]
 		public async Task<IActionResult> Delete(int reservationId, CancellationToken cancellationToken)
 		{
@@ -32,7 +32,7 @@ namespace Presentation.Controllers
 			return Ok(response);
 		}
 
-		[Authorize]
+	
 		[HttpGet("details/{reservationId}")]
 		public async Task<IActionResult> GetReservationById(int reservationId, CancellationToken cancellationToken)
 		{

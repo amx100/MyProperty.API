@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using Domain.Entities;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
 using MyProperty.API.Core.Domain.Entities;
 

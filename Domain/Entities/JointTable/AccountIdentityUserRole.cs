@@ -1,6 +1,5 @@
-﻿using Microsoft.AspNetCore.Identity;
-using MyProperty.API.Core.Domain.Entities;
-using static MyProperty.API.Core.Domain.Entities.Account;
+﻿using Domain.Entities;
+using Microsoft.AspNetCore.Identity;
 
 namespace MyProperty.API.Core.Domain.Entities.JointTable;
 

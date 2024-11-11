@@ -2,10 +2,10 @@
 global using Microsoft.EntityFrameworkCore;
 global using Microsoft.EntityFrameworkCore.Metadata.Builders;
 global using Persistence.Configurations;
+using Domain.Entities;
 using Microsoft.AspNetCore.Identity;
 using MyProperty.API.Core.Domain.Entities;
 using MyProperty.API.Core.Domain.Entities.JointTable;
-using static MyProperty.API.Core.Domain.Entities.Account;
 
 namespace Persistence
 {
@@ -75,7 +75,6 @@ namespace Persistence
 		}
 
 		public DbSet<Property> Properties { get; set; }
-		public DbSet<Transaction> Transactions { get; set; }
 		public DbSet<PropertyImage> PropertiesImages { get; set; }
 		public DbSet<Reservation> Reservations { get; set; }
 	}

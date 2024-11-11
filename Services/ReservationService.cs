@@ -95,7 +95,7 @@ namespace Services
 		public async Task<ReservationDto> GetById(int reservationId, CancellationToken cancellationToken = default)
 		{
 			var reservation = await repositoryManager.ReservationRepository.GetById(reservationId, cancellationToken);
-			return reservation?.Adapt<ReservationDto>();
+			return reservation.Adapt<ReservationDto>();
 		}
 
 		public async Task<GeneralResponseDto> Update(int reservationId, ReservationUpdateDto reservationDto, CancellationToken cancellationToken = default)

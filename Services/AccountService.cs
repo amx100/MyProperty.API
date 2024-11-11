@@ -1,7 +1,6 @@
-﻿using Microsoft.AspNetCore.Identity;
-using MyProperty.API.Core.Domain.Entities;
+﻿using Domain.Entities;
+using Microsoft.AspNetCore.Identity;
 using MyProperty.API.Core.Domain.Repositories.Common;
-using static MyProperty.API.Core.Domain.Entities.Account;
 
 namespace Services
 {

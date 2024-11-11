@@ -1,4 +1,5 @@
-﻿using MyProperty.API.Core.Domain.Entities;
+﻿using Domain.Entities;
+using MyProperty.API.Core.Domain.Entities;
 using MyProperty.API.Core.Domain.Repositories;
 using MyProperty.API.Infrastructure.Persistence.Persistence.Repositories.Common;
 using Persistence;

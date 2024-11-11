@@ -6,7 +6,6 @@
         IAccountRepository AccountRepository { get; }
         IPropertyImageRepository PropertyImageRepository { get; }
         IReservationRepository ReservationRepository { get; }
-        ITransactionRepository TransactionRepository { get; }
         IUnitOfWork UnitOfWork { get; }
     }
 }

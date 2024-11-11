@@ -21,7 +21,7 @@ namespace MyProperty.API.Infrastructure.Persistence.Persistence.Repositories
 
 		public async Task<Reservation> GetById(int reservationId, CancellationToken cancellationToken = default)
 		{
-			return await FindByCondition(r => r.ReservationId == reservationId).FirstOrDefaultAsync(cancellationToken);
+			return await FindByCondition(reservation => reservationId == reservationId).FirstOrDefaultAsync(cancellationToken);
 		}
 
 		public async Task<IEnumerable<Reservation>> GetReservationsByUserId(string accountId, CancellationToken cancellationToken = default)
@@ -39,7 +39,6 @@ namespace MyProperty.API.Infrastructure.Persistence.Persistence.Repositories
 			throw new NotImplementedException();
 		}
 
-		// Implementation of GetExistingReservation
 		public async Task<Reservation?> GetExistingReservation(string accountId, int propertyId, CancellationToken cancellationToken)
 		{
 			return await FindByCondition(r => r.AccountId == accountId && r.PropertyId == propertyId)

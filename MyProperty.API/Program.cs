@@ -1,15 +1,14 @@
+using Domain.Entities;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
-using MyProperty.API.Core.Domain.Entities;
 using MyProperty.API.Core.Domain.Repositories.Common;
 using MyProperty.API.Infrastructure.Persistence.Persistence.Repositories.Common;
 using Persistence;
 using Services;
 using Services.Abstractions;
 using System.Text;
-using static MyProperty.API.Core.Domain.Entities.Account;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -41,8 +40,8 @@ void ConfigureServices(IServiceCollection services)
 		opt.Password.RequireUppercase = true;
 		opt.SignIn.RequireConfirmedEmail = true;
 	})
-		.AddEntityFrameworkStores<DataContext>()
-		.AddDefaultTokenProviders();
+	.AddEntityFrameworkStores<DataContext>()
+	.AddDefaultTokenProviders();
 }
 
 void ConfigureDatabase(IServiceCollection services, IConfiguration configuration)

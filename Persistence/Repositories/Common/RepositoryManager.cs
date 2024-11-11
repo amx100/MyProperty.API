@@ -16,13 +16,6 @@ namespace MyProperty.API.Infrastructure.Persistence.Persistence.Repositories.Com
 
         private readonly Lazy<IReservationRepository> _lazyReservationRepository = new(() => new ReservationRepository(dbContext));
 
-        private readonly Lazy<ITransactionRepository> _lazyTransactionRepository = new(() => new TransactionRepository(dbContext));
-
-
-
-
-
-
 
 
         public IAccountRepository AccountRepository => _lazyAccountRepository.Value;
@@ -35,7 +28,7 @@ namespace MyProperty.API.Infrastructure.Persistence.Persistence.Repositories.Com
 
         public IReservationRepository ReservationRepository => _lazyReservationRepository.Value;
 
-        public ITransactionRepository TransactionRepository => _lazyTransactionRepository.Value;
+
 
 
 

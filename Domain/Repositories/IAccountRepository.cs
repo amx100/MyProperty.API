@@ -1,4 +1,5 @@
-﻿using MyProperty.API.Core.Domain.Entities;
+﻿using Domain.Entities;
+using MyProperty.API.Core.Domain.Entities;
 using MyProperty.API.Core.Domain.Repositories.Common;
 
 namespace MyProperty.API.Core.Domain.Repositories;

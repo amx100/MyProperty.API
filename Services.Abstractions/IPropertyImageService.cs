@@ -8,7 +8,8 @@ namespace Services.Abstractions
 		Task<PropertyImageDto> GetById(int propertyId, int imageId, CancellationToken cancellationToken = default);
 		Task<GeneralResponseDto> Create(int propertyId, PropertyImageCreateDto imageDto, CancellationToken cancellationToken = default);
 		Task<GeneralResponseDto> Update(int propertyId, int imageId, PropertyImageUpdateDto imageDto, CancellationToken cancellationToken = default);
-		Task Delete(int imageId, CancellationToken cancellationToken = default);
+		Task<GeneralResponseDto> Delete(int imageId, CancellationToken cancellationToken = default);
+
 	}
 }
 
