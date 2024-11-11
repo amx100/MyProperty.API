@@ -75,7 +75,6 @@ namespace Persistence
 		}
 
 		public DbSet<Property> Properties { get; set; }
-		public DbSet<Transaction> Transactions { get; set; }
 		public DbSet<PropertyImage> PropertiesImages { get; set; }
 		public DbSet<Reservation> Reservations { get; set; }
 	}

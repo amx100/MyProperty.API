@@ -25,12 +25,7 @@ namespace Services
 
 		private readonly Lazy<IPropertyImageService> _lazyPropertyImageService = new(() => new PropertyImageService(repositoryManager));
 
-		private readonly Lazy<ITransactionService> _lazyTransactionService = new(() => new TransactionService(repositoryManager));
-
 		private readonly Lazy<IReservationService> _lazyReservationService = new(() => new ReservationService(repositoryManager));
-
-
-
 
 
 
@@ -40,8 +35,6 @@ namespace Services
 		public IPropertyService PropertyService => _lazyPropertyService.Value;
 
 		public IPropertyImageService PropertyImageService => _lazyPropertyImageService.Value;
-
-		public ITransactionService TransactionService => _lazyTransactionService.Value;
 
 		public IReservationService ReservationService => _lazyReservationService.Value;
 	}

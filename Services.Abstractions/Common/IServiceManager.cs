@@ -8,8 +8,6 @@
         
         IPropertyImageService PropertyImageService { get; }
 
-        ITransactionService TransactionService { get; }
-
         IReservationService ReservationService { get; }
     }
 }

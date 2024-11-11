@@ -24,14 +24,6 @@ namespace MyProperty.API.Infrastructure.Persistence.Persistence.Repositories
 			return await FindByCondition(reservation => reservationId == reservationId).FirstOrDefaultAsync(cancellationToken);
 		}
 
-
-		/*
-		 *       public async Task<Category> GetById(int cartegoryId, CancellationToken cancellationToken = default)
-        {
-            return await FindByCondition(category => category.Id == cartegoryId)
-                .FirstOrDefaultAsync(cancellationToken);
-        }
-		 */
 		public async Task<IEnumerable<Reservation>> GetReservationsByUserId(string accountId, CancellationToken cancellationToken = default)
 		{
 			return await FindByCondition(r => r.AccountId == accountId).ToListAsync(cancellationToken);
@@ -47,7 +39,6 @@ namespace MyProperty.API.Infrastructure.Persistence.Persistence.Repositories
 			throw new NotImplementedException();
 		}
 
-		// Implementation of GetExistingReservation
 		public async Task<Reservation?> GetExistingReservation(string accountId, int propertyId, CancellationToken cancellationToken)
 		{
 			return await FindByCondition(r => r.AccountId == accountId && r.PropertyId == propertyId)
