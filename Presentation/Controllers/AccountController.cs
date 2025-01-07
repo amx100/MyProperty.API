@@ -6,7 +6,7 @@ using Services.Abstractions;
 namespace Presentation.Controllers
 {
     [ApiController]
-    [Route("api/accounts")] //localhost:5000/api/accounts
+    [Route("api/accounts")] 
     public class AccountController(IServiceManager serviceManager) : ControllerBase
     {
         [HttpGet]
@@ -16,7 +16,7 @@ namespace Presentation.Controllers
             return Ok(response);
         }
         
-        [HttpPost("login")] //localhost:5000/api/accounts/login
+        [HttpPost("login")] 
         public async Task<IActionResult> Login([FromBody] LoginDto loginDto, CancellationToken cancellationToken)
         {
             var response = await serviceManager.AccountService.Login(loginDto, cancellationToken);
@@ -24,7 +24,7 @@ namespace Presentation.Controllers
         }
 
         [Authorize(Roles = "Admin")]
-        [HttpDelete("deleteAccount/{accountId}")] //localhost:5000/api/accounts/deleteAccount/123
+        [HttpDelete("deleteAccount/{accountId}")] 
         public async Task<IActionResult> DeleteAccount(string accountId, CancellationToken cancellationToken)
         {
             await serviceManager.AccountService.Delete(accountId, cancellationToken);
@@ -39,7 +39,7 @@ namespace Presentation.Controllers
         }
 
         [Authorize]
-        [HttpGet("details/{accountId}")] //localhost:5000/api/accounts/details/123
+        [HttpGet("details/{accountId}")] 
         public async Task<IActionResult> GetAccountById(string accountId, CancellationToken cancellationToken)
         {
             var response = await serviceManager.AccountService.GetById(accountId, cancellationToken);

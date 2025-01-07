@@ -1,4 +1,5 @@
 ﻿using Contract;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Services.Abstractions;
 using System.Collections.Generic;
@@ -19,7 +20,7 @@ namespace Presentation.Controllers
 			return Ok(response);
 		}
 
-		// Ova metoda kreira svojstvo
+		[Authorize(Roles = "Owner")]
 		[HttpPost("create")]
 		public async Task<IActionResult> Create([FromBody] PropertyCreateDto propertyDto, CancellationToken cancellationToken)
 		{
@@ -27,7 +28,7 @@ namespace Presentation.Controllers
 			return Ok(response);
 		}
 
-		// Ova metoda dobijaju svojstvo po ID-u, uključujući slike
+		
 		[HttpGet("{propertyId}")]
 		public async Task<IActionResult> GetById(int propertyId, CancellationToken cancellationToken)
 		{
@@ -35,7 +36,7 @@ namespace Presentation.Controllers
 			return Ok(response);
 		}
 
-		// Ova metoda briše svojstvo po ID-u
+		
 		[HttpDelete("delete/{propertyId}")]
 		public async Task<IActionResult> DeleteProperty(int propertyId, CancellationToken cancellationToken)
 		{

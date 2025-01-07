@@ -1,13 +1,17 @@
+global using Contract;
+global using Microsoft.AspNetCore.Authorization;
+global using Microsoft.AspNetCore.Mvc;
+global using Services.Abstractions;
 using Domain.Entities;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
+using Microsoft.OpenApi.Models;
 using MyProperty.API.Core.Domain.Repositories.Common;
 using MyProperty.API.Infrastructure.Persistence.Persistence.Repositories.Common;
 using Persistence;
 using Services;
-using Services.Abstractions;
 using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -16,6 +20,7 @@ ConfigureServices(builder.Services);
 ConfigureDatabase(builder.Services, builder.Configuration);
 ConfigureJwtAuthentication(builder.Services, builder.Configuration);
 ConfigureCors(builder.Services);
+ConfigureSwagger(builder.Services);
 
 var app = builder.Build();
 
@@ -25,7 +30,7 @@ app.Run();
 
 void ConfigureServices(IServiceCollection services)
 {
-	services.AddControllers().AddApplicationPart(typeof(Presentation.AssemblyReference).Assembly);
+	services.AddControllers();
 	services.AddEndpointsApiExplorer();
 	services.AddSwaggerGen();
 
@@ -40,15 +45,16 @@ void ConfigureServices(IServiceCollection services)
 		opt.Password.RequireUppercase = true;
 		opt.SignIn.RequireConfirmedEmail = true;
 	})
-	.AddEntityFrameworkStores<DataContext>()
-	.AddDefaultTokenProviders();
+		.AddEntityFrameworkStores<DataContext>()
+		.AddDefaultTokenProviders();
 }
 
 void ConfigureDatabase(IServiceCollection services, IConfiguration configuration)
 {
+	var serverVersion = new MySqlServerVersion(new Version(8, 0, 26));
 	services.AddDbContextPool<DataContext>(options =>
 	{
-		options.UseMySQL(configuration.GetConnectionString("MainDB"),
+		options.UseMySql(configuration.GetConnectionString("MainDB"), serverVersion,
 			mysqlOptions => { mysqlOptions.EnableRetryOnFailure(1, TimeSpan.FromSeconds(5), null); });
 	});
 }
@@ -85,6 +91,36 @@ void ConfigureCors(IServiceCollection services)
 			builder.AllowAnyOrigin()
 				.AllowAnyMethod()
 				.AllowAnyHeader();
+		});
+	});
+}
+
+void ConfigureSwagger(IServiceCollection services)
+{
+	services.AddSwaggerGen(c =>
+	{
+		c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+		{
+			Description = "JWT Authorization header using the Bearer scheme. Example: 'Bearer {token}'",
+			Name = "Authorization",
+			In = ParameterLocation.Header,
+			Type = SecuritySchemeType.ApiKey,
+			Scheme = "Bearer"
+		});
+
+		c.AddSecurityRequirement(new OpenApiSecurityRequirement
+		{
+			{
+				new OpenApiSecurityScheme
+				{
+					Reference = new OpenApiReference
+					{
+						Type = ReferenceType.SecurityScheme,
+						Id = "Bearer"
+					}
+				},
+				Array.Empty<string>()
+			}
 		});
 	});
 }
