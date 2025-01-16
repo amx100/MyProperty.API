@@ -20,6 +20,7 @@ public class ReservationCreateDto
 
 public class ReservationUpdateDto
 {
+	public int Id { get; set; } // added new line for ui
 	public int PropertyId { get; set; }
 	public string AccountId { get; set; } = string.Empty;  //ukloniti napraviti da owner i admin menjanju status rezervacije
 	public string Status { get; set; } // "Pending", "Confirmed", "Declined"

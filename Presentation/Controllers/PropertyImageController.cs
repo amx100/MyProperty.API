@@ -41,7 +41,23 @@ namespace Presentation.Controllers
 			return Ok(response);
 		}
 
-		[HttpDelete("delete/{imageId}")]
+        [HttpPut("update")]
+        public async Task<IActionResult> UpdateImages(int propertyId, [FromBody] IEnumerable<PropertyImageUpdateDto> imageDtos, CancellationToken cancellationToken)
+        {
+            var response = await serviceManager.PropertyImageService.Update(propertyId, imageDtos, cancellationToken);
+
+            if (response.IsSuccess)
+            {
+                return Ok(new { Message = response.Message });
+            }
+            else
+            {
+                return BadRequest(new { Message = response.Message });
+            }
+        }
+
+
+        [HttpDelete("delete/{imageId}")]
 		public async Task<IActionResult> DeleteImage(int imageId, CancellationToken cancellationToken)
 		{
 			var response = await serviceManager.PropertyImageService.Delete(imageId, cancellationToken);

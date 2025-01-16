@@ -20,7 +20,7 @@ namespace Presentation.Controllers
 			return Ok(response);
 		}
 
-		[Authorize(Roles = "Owner")]
+		
 		[HttpPost("create")]
 		public async Task<IActionResult> Create([FromBody] PropertyCreateDto propertyDto, CancellationToken cancellationToken)
 		{

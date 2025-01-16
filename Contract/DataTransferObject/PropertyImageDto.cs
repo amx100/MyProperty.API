@@ -10,7 +10,7 @@ public class PropertyImageDto
 public class PropertyImageCreateDto
 {
 	public string ImageUrl { get; set; } = string.Empty;
-	// public int? PropertyId { get; set; } // Nullable for unlinked images
+	public int PropertyId { get; set; } //removed comment line for ui  // Nullable for unlinked images
 }
 
 public class PropertyImageUpdateDto
