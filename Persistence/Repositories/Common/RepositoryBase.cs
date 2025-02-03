@@ -5,16 +5,26 @@ using System.Linq.Expressions;
 
 namespace MyProperty.API.Infrastructure.Persistence.Persistence.Repositories.Common
 {
-    public abstract class RepositoryBase<T>(DataContext dataContext) : IRepositoryBase<T> where T : class
+    public abstract class RepositoryBase<T> : IRepositoryBase<T> where T : class
     {
-        public IQueryable<T> FindAll() => dataContext.Set<T>().AsNoTracking();
+        protected DataContext RepositoryContext;
 
-        public IQueryable<T> FindByCondition(Expression<Func<T, bool>> expression) => dataContext.Set<T>().Where(expression).AsNoTracking();
+        protected RepositoryBase(DataContext repositoryContext)
+        {
+            RepositoryContext = repositoryContext;
+        }
 
-        public void Create(T entity) => dataContext.Set<T>().Add(entity);
+        public IQueryable<T> FindAll(bool trackChanges = false) =>
+            !trackChanges ? 
+                RepositoryContext.Set<T>().AsNoTracking() : 
+                RepositoryContext.Set<T>();
 
-        public void Update(T entity) => dataContext.Set<T>().Update(entity);
+        public IQueryable<T> FindByCondition(Expression<Func<T, bool>> expression) => RepositoryContext.Set<T>().Where(expression).AsNoTracking();
 
-        public void Delete(T entity) => dataContext.Set<T>().Remove(entity);
+        public void Create(T entity) => RepositoryContext.Set<T>().Add(entity);
+
+        public void Update(T entity) => RepositoryContext.Set<T>().Update(entity);
+
+        public void Delete(T entity) => RepositoryContext.Set<T>().Remove(entity);
     }
 }

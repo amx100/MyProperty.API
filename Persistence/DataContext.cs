@@ -40,36 +40,79 @@ namespace Persistence
 				.WithMany(x => x.Roles)
 				.HasForeignKey(p => p.RoleId);
 
-			// PropertyImage entity configuration
-			modelBuilder.Entity<PropertyImage>()
-				.HasKey(pi => pi.ImageId);
+			
 
-			modelBuilder.Entity<PropertyImage>()
-				.HasOne(pi => pi.Property)
-				.WithMany(p => p.Images)
-				.HasForeignKey(pi => pi.PropertyId)
-				.OnDelete(DeleteBehavior.SetNull); // Set to null instead of deleting
+        
+            modelBuilder.Entity<PropertyImage>()
+                .HasKey(pi => pi.ImageId);
 
-			// Property entity configuration
-			modelBuilder.Entity<Property>(entity =>
-			{
-				entity.HasKey(p => p.PropertyId); // Ensure PropertyId is the primary key
-				entity.Property(p => p.Title).IsRequired();
-				entity.Property(p => p.Description).IsRequired();
-				entity.Property(p => p.Address).IsRequired();
-				entity.Property(p => p.Price).HasColumnType("decimal(18,2)").IsRequired(); // Adjust precision as needed
-				entity.Property(p => p.PropertyType).IsRequired();
-				entity.Property(p => p.Status).IsRequired();
-				entity.Property(p => p.Area).IsRequired();
+            modelBuilder.Entity<PropertyImage>()
+                .HasOne(pi => pi.Property)
+                .WithMany(p => p.Images)
+                .HasForeignKey(pi => pi.PropertyId)
+                .OnDelete(DeleteBehavior.Cascade); 
 
-				// Configure one-to-many relationship
-				entity.HasMany(p => p.Images)
-					  .WithOne(pi => pi.Property)
-					  .HasForeignKey(pi => pi.PropertyId)
-					  .OnDelete(DeleteBehavior.SetNull); // Set to null instead of deleting
-			});
+         
+            modelBuilder.Entity<Property>(entity =>
+            {
+                entity.HasKey(p => p.PropertyId);
+                entity.Property(p => p.Title).IsRequired();
+                entity.Property(p => p.Description).IsRequired();
+                entity.Property(p => p.Address).IsRequired();
+                entity.Property(p => p.Price).HasColumnType("decimal(18,2)").IsRequired();
+                entity.Property(p => p.PropertyType).IsRequired();
+                entity.Property(p => p.Status).IsRequired();
+                entity.Property(p => p.Area).IsRequired();
 
-			modelBuilder.ApplyConfiguration(new RoleConfiguration());
+                // Configure cascade delete for Images
+                entity.HasMany(p => p.Images)
+                      .WithOne(pi => pi.Property)
+                      .HasForeignKey(pi => pi.PropertyId)
+                      .OnDelete(DeleteBehavior.Cascade);
+
+                // Configure cascade delete for Reservations
+                entity.HasMany(p => p.Reservations)
+                      .WithOne(r => r.Property)
+                      .HasForeignKey(r => r.PropertyId)
+                      .OnDelete(DeleteBehavior.Cascade);
+            });
+
+            modelBuilder.Entity<Reservation>(entity =>
+            {
+                // Primary key
+                entity.HasKey(r => r.ReservationId);
+
+              
+                entity.Property(r => r.Status)
+                    .IsRequired()
+                    .HasMaxLength(50);
+
+                entity.Property(r => r.StartDate)
+                    .IsRequired();
+
+                entity.Property(r => r.EndDate)
+                    .IsRequired();
+
+              
+                entity.Property(r => r.ReservationDate)
+                    .IsRequired();
+
+                entity.HasOne(r => r.Property)
+        .WithMany(p => p.Reservations)
+        .HasForeignKey(r => r.PropertyId)
+        .OnDelete(DeleteBehavior.Cascade); // Promenjeno sa Restrict na Cascade
+
+                // Configure the relationship with Account
+                entity.HasOne(r => r.Account)
+                    .WithMany(a => a.Reservations)
+                    .HasForeignKey(r => r.AccountId)
+                    .OnDelete(DeleteBehavior.Cascade); // Promenjeno sa Restrict na Cascade
+
+
+            });
+
+
+            modelBuilder.ApplyConfiguration(new RoleConfiguration());
 			modelBuilder.ApplyConfiguration(new AccountConfiguration());
 			modelBuilder.ApplyConfiguration(new UserRoleConfiguration());
 		}

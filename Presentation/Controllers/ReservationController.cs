@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Services.Abstractions;
+using System.Text.Json;
 
 namespace Presentation.Controllers
 {
@@ -40,11 +41,38 @@ namespace Presentation.Controllers
 			return Ok(response);
 		}
 
-		[HttpPut("update/{reservationId}")]
-		public async Task<IActionResult> UpdateReservation(int reservationId, [FromBody] ReservationUpdateDto reservationDto, CancellationToken cancellationToken)
-		{
-			var response = await serviceManager.ReservationService.Update(reservationId, reservationDto, cancellationToken);
-			return Ok(response);
-		}
-	}
+        
+        [HttpPut("update/{reservationId}")]
+        [Authorize(Roles = "Admin")]
+        public async Task<IActionResult> UpdateReservation(int reservationId, [FromBody] ReservationUpdateDto reservationDto, CancellationToken cancellationToken)
+        {
+            try
+            {
+                // Log received data
+                Console.WriteLine($"Received update request for reservation {reservationId}");
+                Console.WriteLine($"Request body: {JsonSerializer.Serialize(reservationDto)}");
+
+                var response = await serviceManager.ReservationService.Update(reservationId, reservationDto, cancellationToken);
+
+                Console.WriteLine($"Update response: {JsonSerializer.Serialize(response)}");
+
+                if (!response.IsSuccess)
+                {
+                    return BadRequest(response);
+                }
+
+                return Ok(response);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error in UpdateReservation: {ex.Message}");
+                Console.WriteLine($"Stack trace: {ex.StackTrace}");
+                return StatusCode(500, new GeneralResponseDto
+                {
+                    IsSuccess = false,
+                    Message = $"Internal server error: {ex.Message}"
+                });
+            }
+        }
+    }
 }

@@ -1,7 +1,6 @@
 ﻿using System;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
-using MySql.EntityFrameworkCore.Metadata;
 
 #nullable disable
 
@@ -10,7 +9,7 @@ using MySql.EntityFrameworkCore.Metadata;
 namespace Persistence.Migrations
 {
     /// <inheritdoc />
-    public partial class intial1 : Migration
+    public partial class nova1 : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -90,7 +89,7 @@ namespace Persistence.Migrations
                 columns: table => new
                 {
                     PropertyId = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("MySql:ValueGenerationStrategy", MySQLValueGenerationStrategy.IdentityColumn),
+                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
                     Title = table.Column<string>(type: "longtext", nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     Description = table.Column<string>(type: "longtext", nullable: false)
@@ -256,7 +255,7 @@ namespace Persistence.Migrations
                         column: x => x.PropertyId,
                         principalTable: "Properties",
                         principalColumn: "PropertyId",
-                        onDelete: ReferentialAction.SetNull);
+                        onDelete: ReferentialAction.Cascade);
                 })
                 .Annotation("MySql:CharSet", "utf8mb4");
 
@@ -266,11 +265,13 @@ namespace Persistence.Migrations
                 {
                     ReservationId = table.Column<int>(type: "int", nullable: false)
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
-                    AccountId = table.Column<string>(type: "varchar(255)", nullable: false)
+                    StartDate = table.Column<DateTime>(type: "datetime(6)", nullable: false),
+                    EndDate = table.Column<DateTime>(type: "datetime(6)", nullable: false),
+                    ReservationDate = table.Column<DateTime>(type: "datetime(6)", nullable: false),
+                    Status = table.Column<string>(type: "varchar(50)", maxLength: 50, nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     PropertyId = table.Column<int>(type: "int", nullable: false),
-                    ReservationDate = table.Column<DateTime>(type: "datetime(6)", nullable: false),
-                    Status = table.Column<string>(type: "longtext", nullable: false)
+                    AccountId = table.Column<string>(type: "varchar(255)", nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4")
                 },
                 constraints: table =>
@@ -307,10 +308,10 @@ namespace Persistence.Migrations
                 columns: new[] { "Id", "AccessFailedCount", "ConcurrencyStamp", "Email", "EmailConfirmationToken", "EmailConfirmed", "FirstName", "LastName", "LockoutEnabled", "LockoutEnd", "MobileNumber", "NormalizedEmail", "NormalizedUserName", "PasswordHash", "PasswordResetToken", "PhoneNumber", "PhoneNumberConfirmed", "RefreshToken", "RefreshTokenExpiryTime", "SecurityStamp", "TwoFactorEnabled", "UserName" },
                 values: new object[,]
                 {
-                    { "4334dd38-cdd9-4ba8-99c6-856220356d4a", 0, "1df06d11-f428-4491-adb0-44f281afb6a0", "user@test.com", null, true, "User", "User", false, null, null, "USER@TEST.COM", "USER@TEST.COM", null, null, null, false, "", new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "69877278-d4f0-4956-b89e-9c7bc2d7b7ae", false, "user@test.com" },
-                    { "4cda5ea1-47a4-4383-9a6c-b581d13cc961", 0, "d6b71b4c-36a7-4b47-9121-b71f2278e907", "owner@test.com", null, true, "Owner", "Owner", false, null, null, "OWNER@TEST.COM", "OWNER@TEST.COM", null, null, null, false, "", new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "b63d97a2-4d61-4cb5-be10-499ef1b8e054", false, "owner@test.com" },
-                    { "595af844-b3f7-4d70-87ca-eb9c08a2368a", 0, "fc0f8e18-6828-42c7-ad48-1b57e4ebd452", "admin@test.com", null, true, "Admin", "Admin", false, null, null, "ADMIN@TEST.COM", "ADMIN@TEST.COM", null, null, null, false, "", new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "bddb25ea-befc-49e4-b6c4-453fd45e84ff", false, "admin@test.com" },
-                    { "7ada92d0-de96-45f7-a0f8-dafba1830724", 0, "b5e90eb1-d9b2-43fd-87be-9cabe0d65e58", "buyer@test.com", null, true, "Buyer", "Buyer", false, null, null, "BUYER@TEST.COM", "BUYER@TEST.COM", null, null, null, false, "", new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "7a69179a-cd82-4cc6-a3e3-291dc74ab6ea", false, "buyer@test.com" }
+                    { "4334dd38-cdd9-4ba8-99c6-856220356d4a", 0, "3210ea08-6c15-43dd-8e38-74979305def6", "user@test.com", null, true, "User", "User", false, null, null, "USER@TEST.COM", "USER@TEST.COM", null, null, null, false, "", new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "b0332e46-1159-419d-a03c-03903c39d4c3", false, "user@test.com" },
+                    { "4cda5ea1-47a4-4383-9a6c-b581d13cc961", 0, "9a4290ec-41d2-446d-bb7c-ea4637f1a632", "owner@test.com", null, true, "Owner", "Owner", false, null, null, "OWNER@TEST.COM", "OWNER@TEST.COM", null, null, null, false, "", new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "879629d2-df5c-4ec3-9070-8dfc665869c1", false, "owner@test.com" },
+                    { "595af844-b3f7-4d70-87ca-eb9c08a2368a", 0, "07925caa-19bb-41db-8b11-abbdd50237c6", "admin@test.com", null, true, "Admin", "Admin", false, null, null, "ADMIN@TEST.COM", "ADMIN@TEST.COM", null, null, null, false, "", new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "d513ed9f-9d21-463c-b47f-b42a927068b5", false, "admin@test.com" },
+                    { "7ada92d0-de96-45f7-a0f8-dafba1830724", 0, "3c791b63-f7a0-4b40-9885-3eb574ef64e8", "buyer@test.com", null, true, "Buyer", "Buyer", false, null, null, "BUYER@TEST.COM", "BUYER@TEST.COM", null, null, null, false, "", new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "373b6387-3f99-4cda-a9c2-77e70d196e90", false, "buyer@test.com" }
                 });
 
             migrationBuilder.InsertData(

@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Identity;
+using MyProperty.API.Core.Domain.Entities;
 using MyProperty.API.Core.Domain.Entities.JointTable;
 
 namespace Domain.Entities;
@@ -20,6 +21,8 @@ public class Account : IdentityUser
 	public string? MobileNumber { get; set; }
 
 	public virtual ICollection<AccountIdentityUserRole> Roles { get; } = [];
+
+    public virtual ICollection<Reservation> Reservations { get; set; } = new List<Reservation>();
 }
 
 public class AccountRole : IdentityRole

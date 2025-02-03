@@ -14,15 +14,16 @@ public class PropertyRepository(DataContext dataContext) : RepositoryBase<Proper
 
 	public async Task<IEnumerable<Property>> GetAllProperties(CancellationToken cancellationToken = default)
 	{
-		return await FindAll()
-			.Include(p => p.Images) // Including images
+		return await FindAll(trackChanges: false)
+			.Include(p => p.Images)
 			.ToListAsync(cancellationToken);
 	}
 
 	public async Task<Property> GetById(int propertyId, CancellationToken cancellationToken)
 	{
 		return await FindByCondition(p => p.PropertyId == propertyId)
-			.Include(p => p.Images) // Include related images
+			.Include(p => p.Images)
+			.Include(p => p.Reservations)  // Include reservations as well
 			.FirstOrDefaultAsync(cancellationToken);
 	}
 

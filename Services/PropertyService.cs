@@ -137,29 +137,51 @@ namespace Services
 
 
         public async Task<GeneralResponseDto> Delete(int propertyId, CancellationToken cancellationToken = default)
-		{
-			try
-			{
-				var property = await repositoryManager.PropertyRepository.GetById(propertyId, cancellationToken);
-				if (property == null)
-				{
-					return new GeneralResponseDto { IsSuccess = false, Message = "Property not found." };
-				}
+        {
+            try
+            {
+                var property = await repositoryManager.PropertyRepository.GetById(propertyId, cancellationToken);
+                if (property == null)
+                {
+                    return new GeneralResponseDto
+                    {
+                        IsSuccess = false,
+                        Message = "Property not found."
+                    };
+                }
 
-				repositoryManager.PropertyRepository.Delete(property);
-				var rowsAffected = await repositoryManager.UnitOfWork.SaveChangesAsync(cancellationToken);
+                // Enable change tracking for the delete operation
+                repositoryManager.PropertyRepository.Delete(property);
+                var result = await repositoryManager.UnitOfWork.SaveChangesAsync(cancellationToken);
 
-				return rowsAffected == 1
-					? new GeneralResponseDto { IsSuccess = true, Message = "Property deleted successfully!" }
-					: new GeneralResponseDto { IsSuccess = false, Message = "Error while deleting the property." };
-			}
-			catch (Exception ex)
-			{
-				return new GeneralResponseDto { IsSuccess = false, Message = ex.Message };
-			}
-		}
+                if (result > 0)
+                {
+                    return new GeneralResponseDto
+                    {
+                        IsSuccess = true,
+                        Message = "Property and all related data successfully deleted."
+                    };
+                }
+                else
+                {
+                    return new GeneralResponseDto
+                    {
+                        IsSuccess = false,
+                        Message = "No changes were made to the database."
+                    };
+                }
+            }
+            catch (Exception ex)
+            {
+                return new GeneralResponseDto
+                {
+                    IsSuccess = false,
+                    Message = $"Error deleting property: {ex.Message}"
+                };
+            }
+        }
 
 
 
-	}
+    }
 }

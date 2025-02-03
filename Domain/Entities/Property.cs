@@ -15,7 +15,7 @@ namespace MyProperty.API.Core.Domain.Entities
 
 		// Navigational property to hold related images
 		public ICollection<PropertyImage> Images { get; set; } = new List<PropertyImage>();
+        public virtual ICollection<Reservation> Reservations { get; set; } = new List<Reservation>();
 
-	
-	}
+    }
 }

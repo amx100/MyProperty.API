@@ -98,31 +98,52 @@ namespace Services
 			return reservation.Adapt<ReservationDto>();
 		}
 
-		public async Task<GeneralResponseDto> Update(int reservationId, ReservationUpdateDto reservationDto, CancellationToken cancellationToken = default)
-		{
-			try
-			{
-				var existingReservation = await repositoryManager.ReservationRepository.GetById(reservationId, cancellationToken);
-				if (existingReservation == null)
-					return new GeneralResponseDto { IsSuccess = false, Message = "Reservation not found." };
+        public async Task<GeneralResponseDto> Update(int reservationId, ReservationUpdateDto reservationDto, CancellationToken cancellationToken = default)
+        {
+            try
+            {
+                var existingReservation = await repositoryManager.ReservationRepository.GetById(reservationId, cancellationToken);
+                if (existingReservation == null)
+                {
+                    return new GeneralResponseDto
+                    {
+                        IsSuccess = false,
+                        Message = "Reservation not found."
+                    };
+                }
 
-				reservationDto.Adapt(existingReservation);
+                // Ažuriranje statusa
+                existingReservation.Status = reservationDto.Status;
 
-				repositoryManager.ReservationRepository.Update(existingReservation);
-				var res = await repositoryManager.UnitOfWork.SaveChangesAsync(cancellationToken);
-				if (res != 1)
-					return new GeneralResponseDto { IsSuccess = false };
+                // Čuvanje promena
+                repositoryManager.ReservationRepository.Update(existingReservation);
+                var result = await repositoryManager.UnitOfWork.SaveChangesAsync(cancellationToken);
 
-				return new GeneralResponseDto { Message = "Reservation updated successfully." };
-			}
-			catch (Exception ex)
-			{
-				return new GeneralResponseDto
-				{
-					IsSuccess = false,
-					Message = ex.Message
-				};
-			}
-		}
-	}
+                if (result <= 0)
+                {
+                    return new GeneralResponseDto
+                    {
+                        IsSuccess = false,
+                        Message = "Failed to save changes to database."
+                    };
+                }
+
+                return new GeneralResponseDto
+                {
+                    IsSuccess = true,
+                    Message = $"Reservation status updated to {reservationDto.Status} successfully."
+                };
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error in Update: {ex.Message}");
+                Console.WriteLine($"Stack trace: {ex.StackTrace}");
+                return new GeneralResponseDto
+                {
+                    IsSuccess = false,
+                    Message = $"Error updating reservation: {ex.Message}"
+                };
+            }
+        }
+    }
 }

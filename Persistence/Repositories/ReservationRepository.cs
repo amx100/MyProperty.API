@@ -16,15 +16,23 @@ namespace MyProperty.API.Infrastructure.Persistence.Persistence.Repositories
 
 		public async Task<IEnumerable<Reservation>> GetAllReservations(CancellationToken cancellationToken = default)
 		{
-			return await FindAll().ToListAsync(cancellationToken);
+			return await FindAll(trackChanges: false)
+				.Include(r => r.Property)
+				.Include(r => r.Account)
+				.ToListAsync(cancellationToken);
 		}
 
-		public async Task<Reservation> GetById(int reservationId, CancellationToken cancellationToken = default)
-		{
-			return await FindByCondition(reservation => reservationId == reservationId).FirstOrDefaultAsync(cancellationToken);
-		}
+   
 
-		public async Task<IEnumerable<Reservation>> GetReservationsByUserId(string accountId, CancellationToken cancellationToken = default)
+        public async Task<Reservation> GetById(int reservationId, CancellationToken cancellationToken = default)
+        {
+
+            return await FindByCondition(r => r.ReservationId == reservationId).FirstOrDefaultAsync(cancellationToken);
+        }
+
+
+
+        public async Task<IEnumerable<Reservation>> GetReservationsByUserId(string accountId, CancellationToken cancellationToken = default)
 		{
 			return await FindByCondition(r => r.AccountId == accountId).ToListAsync(cancellationToken);
 		}
