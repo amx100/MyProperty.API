@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Persistence;
@@ -11,8 +12,8 @@ using Persistence;
 namespace Persistence.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20241103030905_InitialMigration")]
-    partial class InitialMigration
+    [Migration("20250118011612_intial1")]
+    partial class intial1
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -21,6 +22,8 @@ namespace Persistence.Migrations
             modelBuilder
                 .HasAnnotation("ProductVersion", "8.0.10")
                 .HasAnnotation("Relational:MaxIdentifierLength", 64);
+
+            MySqlModelBuilderExtensions.AutoIncrementColumns(modelBuilder);
 
             modelBuilder.Entity("Domain.Entities.Account", b =>
                 {
@@ -55,7 +58,7 @@ namespace Persistence.Migrations
                         .HasColumnType("tinyint(1)");
 
                     b.Property<DateTimeOffset?>("LockoutEnd")
-                        .HasColumnType("datetime");
+                        .HasColumnType("datetime(6)");
 
                     b.Property<string>("MobileNumber")
                         .HasColumnType("longtext");
@@ -113,7 +116,7 @@ namespace Persistence.Migrations
                         {
                             Id = "595af844-b3f7-4d70-87ca-eb9c08a2368a",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "a2b7bff5-21b2-4af0-888a-139c2c5f43d9",
+                            ConcurrencyStamp = "fc0f8e18-6828-42c7-ad48-1b57e4ebd452",
                             Email = "admin@test.com",
                             EmailConfirmed = true,
                             FirstName = "Admin",
@@ -124,7 +127,7 @@ namespace Persistence.Migrations
                             PhoneNumberConfirmed = false,
                             RefreshToken = "",
                             RefreshTokenExpiryTime = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            SecurityStamp = "0a2c7b5d-a4da-458c-a0ca-dff4824ba23d",
+                            SecurityStamp = "bddb25ea-befc-49e4-b6c4-453fd45e84ff",
                             TwoFactorEnabled = false,
                             UserName = "admin@test.com"
                         },
@@ -132,7 +135,7 @@ namespace Persistence.Migrations
                         {
                             Id = "4334dd38-cdd9-4ba8-99c6-856220356d4a",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "a1a1d82a-8ae6-480a-9f2f-e66037ba36a1",
+                            ConcurrencyStamp = "1df06d11-f428-4491-adb0-44f281afb6a0",
                             Email = "user@test.com",
                             EmailConfirmed = true,
                             FirstName = "User",
@@ -143,7 +146,7 @@ namespace Persistence.Migrations
                             PhoneNumberConfirmed = false,
                             RefreshToken = "",
                             RefreshTokenExpiryTime = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            SecurityStamp = "2854b1d2-69da-48f8-af81-fdcdd6cd4afb",
+                            SecurityStamp = "69877278-d4f0-4956-b89e-9c7bc2d7b7ae",
                             TwoFactorEnabled = false,
                             UserName = "user@test.com"
                         },
@@ -151,7 +154,7 @@ namespace Persistence.Migrations
                         {
                             Id = "4cda5ea1-47a4-4383-9a6c-b581d13cc961",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "5175d4aa-f154-471b-957a-a8f9b01ac828",
+                            ConcurrencyStamp = "d6b71b4c-36a7-4b47-9121-b71f2278e907",
                             Email = "owner@test.com",
                             EmailConfirmed = true,
                             FirstName = "Owner",
@@ -162,7 +165,7 @@ namespace Persistence.Migrations
                             PhoneNumberConfirmed = false,
                             RefreshToken = "",
                             RefreshTokenExpiryTime = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            SecurityStamp = "386ec5cc-9a46-4522-86cc-47326bb961fe",
+                            SecurityStamp = "b63d97a2-4d61-4cb5-be10-499ef1b8e054",
                             TwoFactorEnabled = false,
                             UserName = "owner@test.com"
                         },
@@ -170,7 +173,7 @@ namespace Persistence.Migrations
                         {
                             Id = "7ada92d0-de96-45f7-a0f8-dafba1830724",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "eb16ad9b-7025-4035-9fd6-a688e21b2868",
+                            ConcurrencyStamp = "b5e90eb1-d9b2-43fd-87be-9cabe0d65e58",
                             Email = "buyer@test.com",
                             EmailConfirmed = true,
                             FirstName = "Buyer",
@@ -181,7 +184,7 @@ namespace Persistence.Migrations
                             PhoneNumberConfirmed = false,
                             RefreshToken = "",
                             RefreshTokenExpiryTime = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            SecurityStamp = "159183e0-1901-45f8-87aa-3b88d21544cc",
+                            SecurityStamp = "7a69179a-cd82-4cc6-a3e3-291dc74ab6ea",
                             TwoFactorEnabled = false,
                             UserName = "buyer@test.com"
                         });
@@ -245,6 +248,8 @@ namespace Persistence.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
+                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
+
                     b.Property<string>("ClaimType")
                         .HasColumnType("longtext");
 
@@ -267,6 +272,8 @@ namespace Persistence.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
+
+                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("ClaimType")
                         .HasColumnType("longtext");
@@ -369,6 +376,8 @@ namespace Persistence.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
+                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("PropertyId"));
+
                     b.Property<string>("Address")
                         .IsRequired()
                         .HasColumnType("longtext");
@@ -406,6 +415,8 @@ namespace Persistence.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
+                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("ImageId"));
+
                     b.Property<string>("ImageUrl")
                         .IsRequired()
                         .HasColumnType("longtext");
@@ -429,6 +440,8 @@ namespace Persistence.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
+                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("ReservationId"));
+
                     b.Property<string>("AccountId")
                         .IsRequired()
                         .HasColumnType("varchar(255)");
@@ -450,40 +463,6 @@ namespace Persistence.Migrations
                     b.HasIndex("PropertyId");
 
                     b.ToTable("Reservations");
-                });
-
-            modelBuilder.Entity("MyProperty.API.Core.Domain.Entities.Transaction", b =>
-                {
-                    b.Property<int>("TransactionId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    b.Property<decimal>("Amount")
-                        .HasColumnType("decimal(18,2)");
-
-                    b.Property<string>("BuyerId")
-                        .IsRequired()
-                        .HasColumnType("varchar(255)");
-
-                    b.Property<string>("OwnerId")
-                        .IsRequired()
-                        .HasColumnType("varchar(255)");
-
-                    b.Property<int>("PropertyId")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime>("TransactionDate")
-                        .HasColumnType("datetime(6)");
-
-                    b.HasKey("TransactionId");
-
-                    b.HasIndex("BuyerId");
-
-                    b.HasIndex("OwnerId");
-
-                    b.HasIndex("PropertyId");
-
-                    b.ToTable("Transactions");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -568,33 +547,6 @@ namespace Persistence.Migrations
                     b.Navigation("Property");
 
                     b.Navigation("User");
-                });
-
-            modelBuilder.Entity("MyProperty.API.Core.Domain.Entities.Transaction", b =>
-                {
-                    b.HasOne("Domain.Entities.Account", "Buyer")
-                        .WithMany()
-                        .HasForeignKey("BuyerId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Domain.Entities.Account", "Owner")
-                        .WithMany()
-                        .HasForeignKey("OwnerId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("MyProperty.API.Core.Domain.Entities.Property", "Property")
-                        .WithMany()
-                        .HasForeignKey("PropertyId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Buyer");
-
-                    b.Navigation("Owner");
-
-                    b.Navigation("Property");
                 });
 
             modelBuilder.Entity("Domain.Entities.Account", b =>

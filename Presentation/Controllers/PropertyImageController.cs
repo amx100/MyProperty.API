@@ -41,10 +41,10 @@ namespace Presentation.Controllers
 			return Ok(response);
 		}
 
-        [HttpPut("update")]
-        public async Task<IActionResult> UpdateImages(int propertyId, [FromBody] IEnumerable<PropertyImageUpdateDto> imageDtos, CancellationToken cancellationToken)
+        [HttpPut("update/{imageId}")]
+        public async Task<IActionResult> UpdateImage(int propertyId, int imageId, [FromBody] PropertyImageUpdateDto imageDto, CancellationToken cancellationToken)
         {
-            var response = await serviceManager.PropertyImageService.Update(propertyId, imageDtos, cancellationToken);
+            var response = await serviceManager.PropertyImageService.Update(propertyId, imageId, imageDto, cancellationToken);
 
             if (response.IsSuccess)
             {
@@ -55,6 +55,7 @@ namespace Presentation.Controllers
                 return BadRequest(new { Message = response.Message });
             }
         }
+
 
 
         [HttpDelete("delete/{imageId}")]
