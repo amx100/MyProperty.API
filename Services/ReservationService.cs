@@ -31,7 +31,7 @@ namespace Services
 					};
 				}
 
-				// Check for existing reservations by the same user on this property
+				// Check for existing reservations
 				var existingReservation = await repositoryManager.ReservationRepository
 					.GetExistingReservation(reservationDto.AccountId, reservationDto.PropertyId, cancellationToken);
 				if (existingReservation != null)
@@ -43,10 +43,16 @@ namespace Services
 					};
 				}
 
-				// Create the reservation with default "Pending" status
-				var reservation = reservationDto.Adapt<Reservation>();
-				reservation.Status = "Pending";
-				reservation.ReservationDate = DateTime.UtcNow;
+				// Create new reservation and set properties manually instead of using Adapt
+				var reservation = new Reservation
+				{
+					PropertyId = reservationDto.PropertyId,
+					AccountId = reservationDto.AccountId,
+					StartDate = reservationDto.StartDate,
+					EndDate = reservationDto.EndDate,
+					Status = "Pending",
+					ReservationDate = DateTime.UtcNow
+				};
 
 				repositoryManager.ReservationRepository.Create(reservation);
 				await repositoryManager.UnitOfWork.SaveChangesAsync(cancellationToken);
@@ -77,16 +83,15 @@ namespace Services
 		public async Task<IEnumerable<ReservationDto>> GetAll(CancellationToken cancellationToken = default)
 		{
 			var reservations = await repositoryManager.ReservationRepository.GetAllReservations(cancellationToken);
-
 			
 			var reservationDtos = reservations.Select(r => new ReservationDto
 			{
 				Id = r.ReservationId,
-			
 				PropertyId = r.PropertyId,
 				AccountId = r.AccountId,
 				Status = r.Status,
-			
+				StartDate = r.StartDate,
+				EndDate = r.EndDate
 			});
 
 			return reservationDtos;
@@ -112,10 +117,32 @@ namespace Services
                     };
                 }
 
-                // Ažuriranje statusa
+                // The Property is already included in the existingReservation
+                var property = existingReservation.Property;
+                if (property == null)
+                {
+                    return new GeneralResponseDto
+                    {
+                        IsSuccess = false,
+                        Message = "Associated property not found."
+                    };
+                }
+
+                // Update reservation status
                 existingReservation.Status = reservationDto.Status;
 
-                // Čuvanje promena
+                // If reservation is confirmed, update property status to Reserved
+                if (reservationDto.Status == "Confirmed")
+                {
+                    property.Status = "Reserved";
+                }
+                // If reservation is declined or cancelled, ensure property is Available
+                else if (reservationDto.Status == "Declined" || reservationDto.Status == "Cancelled")
+                {
+                    property.Status = "Available";
+                }
+
+                // Save changes
                 repositoryManager.ReservationRepository.Update(existingReservation);
                 var result = await repositoryManager.UnitOfWork.SaveChangesAsync(cancellationToken);
 
@@ -131,7 +158,7 @@ namespace Services
                 return new GeneralResponseDto
                 {
                     IsSuccess = true,
-                    Message = $"Reservation status updated to {reservationDto.Status} successfully."
+                    Message = $"Reservation status updated to {reservationDto.Status} successfully. Property status updated accordingly."
                 };
             }
             catch (Exception ex)

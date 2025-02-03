@@ -20,14 +20,16 @@ namespace Presentation.Controllers
 
 	
 		[HttpDelete("delete/{reservationId}")]
-		public async Task<IActionResult> Delete(int reservationId, CancellationToken cancellationToken)
+        [Authorize(Roles = "Admin")]
+        public async Task<IActionResult> Delete(int reservationId, CancellationToken cancellationToken)
 		{
 			await serviceManager.ReservationService.Delete(reservationId, cancellationToken);
 			return NoContent();
 		}
 
 		[HttpPost("create")]
-		public async Task<IActionResult> Create([FromBody] ReservationCreateDto reservationDto, CancellationToken cancellationToken)
+        [Authorize(Roles = "Admin,User")]
+        public async Task<IActionResult> Create([FromBody] ReservationCreateDto reservationDto, CancellationToken cancellationToken)
 		{
 			var response = await serviceManager.ReservationService.Create(reservationDto, cancellationToken);
 			return Ok(response);

@@ -26,7 +26,8 @@ namespace Presentation.Controllers
 
 
 		[HttpPost("upload")]
-		public async Task<IActionResult> UploadImage(int propertyId, [FromBody] PropertyImageCreateDto imageDto, CancellationToken cancellationToken)
+        [Authorize(Roles = "Admin")]
+        public async Task<IActionResult> UploadImage(int propertyId, [FromBody] PropertyImageCreateDto imageDto, CancellationToken cancellationToken)
 		{
 			
 			var response = await serviceManager.PropertyImageService.Create(propertyId, imageDto, cancellationToken);
@@ -42,6 +43,7 @@ namespace Presentation.Controllers
 		}
 
         [HttpPut("update/{imageId}")]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> UpdateImage(int propertyId, int imageId, [FromBody] PropertyImageUpdateDto imageDto, CancellationToken cancellationToken)
         {
             var response = await serviceManager.PropertyImageService.Update(propertyId, imageId, imageDto, cancellationToken);
@@ -59,7 +61,8 @@ namespace Presentation.Controllers
 
 
         [HttpDelete("delete/{imageId}")]
-		public async Task<IActionResult> DeleteImage(int imageId, CancellationToken cancellationToken)
+        [Authorize(Roles = "Admin")]
+        public async Task<IActionResult> DeleteImage(int imageId, CancellationToken cancellationToken)
 		{
 			var response = await serviceManager.PropertyImageService.Delete(imageId, cancellationToken);
 

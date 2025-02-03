@@ -22,6 +22,7 @@ namespace Presentation.Controllers
 
 		
 		[HttpPost("create")]
+		[Authorize(Roles = "Admin")]
 		public async Task<IActionResult> Create([FromBody] PropertyCreateDto propertyDto, CancellationToken cancellationToken)
 		{
 			var response = await serviceManager.PropertyService.Create(propertyDto, cancellationToken);
@@ -29,8 +30,11 @@ namespace Presentation.Controllers
 		}
 
 		
+		
 		[HttpGet("{propertyId}")]
+		[Authorize(Roles = "Admin")]
 		public async Task<IActionResult> GetById(int propertyId, CancellationToken cancellationToken)
+
 		{
 			var response = await serviceManager.PropertyService.GetById(propertyId, cancellationToken);
 			return Ok(response);
@@ -38,6 +42,7 @@ namespace Presentation.Controllers
 
 		
 		[HttpDelete("delete/{propertyId}")]
+		[Authorize(Roles = "Admin")]
 		public async Task<IActionResult> DeleteProperty(int propertyId, CancellationToken cancellationToken)
 		{
 			var response = await serviceManager.PropertyService.Delete(propertyId, cancellationToken);
@@ -51,7 +56,9 @@ namespace Presentation.Controllers
 		}
 
 		[HttpPut("update/{propertyId}")]
+		[Authorize(Roles = "Admin")]
 		public async Task<IActionResult> UpdateProperty(int propertyId, [FromBody] PropertyUpdateDto propertyDto, CancellationToken cancellationToken)
+
 		{
 			var response = await serviceManager.PropertyService.Update(propertyId, propertyDto, cancellationToken);
 			return Ok(response);
