@@ -10,6 +10,7 @@ namespace MyProperty.API.Core.Domain.Repositories
         Task<IEnumerable<Property>> GetPropertiesByStatus(string status, CancellationToken cancellationToken = default);
         Task<IEnumerable<Property>> GetPropertiesByType(string propertyType, CancellationToken cancellationToken = default);
         Task<IEnumerable<Property>> GetPropertiesInPriceRange(decimal minPrice, decimal maxPrice, CancellationToken cancellationToken = default);
+        Task<bool> HasActiveReservations(int propertyId, CancellationToken cancellationToken = default);
 
         void CreateProperty(Property property, CancellationToken cancellationToken = default);
         void DeleteProperty(Property property, CancellationToken cancellationToken = default);

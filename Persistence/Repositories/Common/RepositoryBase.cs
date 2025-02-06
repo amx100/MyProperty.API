@@ -7,24 +7,27 @@ namespace MyProperty.API.Infrastructure.Persistence.Persistence.Repositories.Com
 {
     public abstract class RepositoryBase<T> : IRepositoryBase<T> where T : class
     {
-        protected DataContext RepositoryContext;
+        protected DataContext DataContext { get; set; }
 
-        protected RepositoryBase(DataContext repositoryContext)
+        protected RepositoryBase(DataContext dataContext)
         {
-            RepositoryContext = repositoryContext;
+            DataContext = dataContext;
         }
 
         public IQueryable<T> FindAll(bool trackChanges = false) =>
             !trackChanges ? 
-                RepositoryContext.Set<T>().AsNoTracking() : 
-                RepositoryContext.Set<T>();
+                DataContext.Set<T>().AsNoTracking() : 
+                DataContext.Set<T>();
 
-        public IQueryable<T> FindByCondition(Expression<Func<T, bool>> expression) => RepositoryContext.Set<T>().Where(expression).AsNoTracking();
+        public IQueryable<T> FindByCondition(Expression<Func<T, bool>> expression, bool trackChanges = false) =>
+            !trackChanges ? 
+                DataContext.Set<T>().Where(expression).AsNoTracking() : 
+                DataContext.Set<T>().Where(expression);
 
-        public void Create(T entity) => RepositoryContext.Set<T>().Add(entity);
+        public void Create(T entity) => DataContext.Set<T>().Add(entity);
 
-        public void Update(T entity) => RepositoryContext.Set<T>().Update(entity);
+        public void Update(T entity) => DataContext.Set<T>().Update(entity);
 
-        public void Delete(T entity) => RepositoryContext.Set<T>().Remove(entity);
+        public void Delete(T entity) => DataContext.Set<T>().Remove(entity);
     }
 }

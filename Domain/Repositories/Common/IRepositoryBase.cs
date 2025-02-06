@@ -6,7 +6,7 @@ namespace MyProperty.API.Core.Domain.Repositories.Common
     {
         IQueryable<T> FindAll(bool trackChanges = false);
 
-        IQueryable<T> FindByCondition(Expression<Func<T, bool>> expression);
+        IQueryable<T> FindByCondition(Expression<Func<T, bool>> expression, bool trackChanges = false);
 
         void Create(T entity);
 

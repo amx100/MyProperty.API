@@ -21,9 +21,9 @@ public class PropertyRepository(DataContext dataContext) : RepositoryBase<Proper
 
 	public async Task<Property> GetById(int propertyId, CancellationToken cancellationToken)
 	{
-		return await FindByCondition(p => p.PropertyId == propertyId)
+		return await FindByCondition(p => p.PropertyId == propertyId, trackChanges: true)
 			.Include(p => p.Images)
-			.Include(p => p.Reservations)  // Include reservations as well
+			.Include(p => p.Reservations)
 			.FirstOrDefaultAsync(cancellationToken);
 	}
 
@@ -40,5 +40,13 @@ public class PropertyRepository(DataContext dataContext) : RepositoryBase<Proper
 	public async Task<IEnumerable<Property>> GetPropertiesInPriceRange(decimal minPrice, decimal maxPrice, CancellationToken cancellationToken = default)
 	{
 		return await FindByCondition(p => p.Price >= minPrice && p.Price <= maxPrice).ToListAsync(cancellationToken);
+	}
+
+	public async Task<bool> HasActiveReservations(int propertyId, CancellationToken cancellationToken)
+	{
+		return await DataContext.Set<Reservation>()
+			.AnyAsync(r => r.PropertyId == propertyId 
+						  && r.Status == "Confirmed", 
+				   cancellationToken);
 	}
 }

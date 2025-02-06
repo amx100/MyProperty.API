@@ -26,7 +26,7 @@ namespace MyProperty.API.Infrastructure.Persistence.Persistence.Repositories
 
         public async Task<Reservation> GetById(int reservationId, CancellationToken cancellationToken = default)
         {
-            return await FindByCondition(r => r.ReservationId == reservationId)
+            return await FindByCondition(r => r.ReservationId == reservationId, trackChanges: true)
                 .Include(r => r.Property)
                 .Include(r => r.Account)
                 .FirstOrDefaultAsync(cancellationToken);

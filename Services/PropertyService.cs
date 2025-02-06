@@ -14,6 +14,9 @@ namespace Services
 			try
 			{
 				var property = propertyDto.Adapt<Property>();
+				// Explicitly set the initial status to "Available"
+				property.Status = "Available";
+				
 				repositoryManager.PropertyRepository.CreateProperty(property);
 				var rowsAffected = await repositoryManager.UnitOfWork.SaveChangesAsync(cancellationToken);
 
@@ -102,36 +105,66 @@ namespace Services
 
         public async Task<GeneralResponseDto> Update(int propertyId, PropertyUpdateDto propertyDto, CancellationToken cancellationToken = default)
         {
-            var property = await repositoryManager.PropertyRepository.GetById(propertyId, cancellationToken);
-            if (property == null)
+            try
             {
-                return new GeneralResponseDto { IsSuccess = false, Message = "Property not found." };
+                var property = await repositoryManager.PropertyRepository.GetById(propertyId, cancellationToken);
+                if (property == null)
+                {
+                    return new GeneralResponseDto { IsSuccess = false, Message = "Property not found." };
+                }
+
+                // Update property fields
+                property.Title = propertyDto.Title;
+                property.Description = propertyDto.Description;
+                property.Address = propertyDto.Address;
+                property.Price = propertyDto.Price;
+                property.PropertyType = propertyDto.PropertyType;
+                property.Area = propertyDto.Area;
+
+                // Only update status if there are no confirmed reservations
+                if (propertyDto.Status != property.Status)
+                {
+                    var hasConfirmedReservations = await repositoryManager.PropertyRepository.HasActiveReservations(propertyId, cancellationToken);
+                    if (!hasConfirmedReservations)
+                    {
+                        property.Status = propertyDto.Status;
+                    }
+                    else
+                    {
+                        return new GeneralResponseDto 
+                        { 
+                            IsSuccess = false, 
+                            Message = "Cannot update property status because it has active reservations." 
+                        };
+                    }
+                }
+
+                repositoryManager.PropertyRepository.UpdateProperty(property);
+                var result = await repositoryManager.UnitOfWork.SaveChangesAsync(cancellationToken);
+
+                if (result <= 0)
+                {
+                    return new GeneralResponseDto 
+                    { 
+                        IsSuccess = false, 
+                        Message = "No changes were made to the property." 
+                    };
+                }
+
+                return new GeneralResponseDto 
+                { 
+                    IsSuccess = true, 
+                    Message = "Property updated successfully!" 
+                };
             }
-
-            // Update property fields
-            property.Title = propertyDto.Title;
-            property.Description = propertyDto.Description;
-            property.Address = propertyDto.Address;
-            property.Price = propertyDto.Price;
-            property.PropertyType = propertyDto.PropertyType;
-            property.Status = propertyDto.Status;
-            property.Area = propertyDto.Area;
-
-            repositoryManager.PropertyRepository.UpdateProperty(property);
-            var rowsAffected = await repositoryManager.UnitOfWork.SaveChangesAsync(cancellationToken);
-
-            // If rowsAffected is 0, it may indicate no changes, but we still consider it a success if no error occurred
-            if (rowsAffected == 0)
+            catch (Exception ex)
             {
-                return new GeneralResponseDto { IsSuccess = true, Message = "Property updated successfully (no changes detected)." };
+                return new GeneralResponseDto
+                {
+                    IsSuccess = false,
+                    Message = $"Error while updating the property: {ex.Message}"
+                };
             }
-
-            if (rowsAffected != 1)
-            {
-                return new GeneralResponseDto { IsSuccess = false, Message = "Error while updating the property." };
-            }
-
-            return new GeneralResponseDto { Message = "Property updated successfully!" };
         }
 
 

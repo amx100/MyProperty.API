@@ -58,9 +58,14 @@ namespace Presentation.Controllers
 		[HttpPut("update/{propertyId}")]
 		[Authorize(Roles = "Admin")]
 		public async Task<IActionResult> UpdateProperty(int propertyId, [FromBody] PropertyUpdateDto propertyDto, CancellationToken cancellationToken)
-
 		{
 			var response = await serviceManager.PropertyService.Update(propertyId, propertyDto, cancellationToken);
+			
+			if (!response.IsSuccess)
+			{
+				return BadRequest(response);
+			}
+
 			return Ok(response);
 		}
 	}

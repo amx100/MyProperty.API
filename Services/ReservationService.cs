@@ -107,6 +107,7 @@ namespace Services
         {
             try
             {
+                // Get the reservation with tracking enabled and include related entities
                 var existingReservation = await repositoryManager.ReservationRepository.GetById(reservationId, cancellationToken);
                 if (existingReservation == null)
                 {
@@ -117,7 +118,7 @@ namespace Services
                     };
                 }
 
-                // The Property is already included in the existingReservation
+                // Get the property without creating a new tracking instance
                 var property = existingReservation.Property;
                 if (property == null)
                 {
@@ -131,18 +132,29 @@ namespace Services
                 // Update reservation status
                 existingReservation.Status = reservationDto.Status;
 
-                // If reservation is confirmed, update property status to Reserved
+                // Check if there are any active reservations for this property
+                var activeReservations = await repositoryManager.ReservationRepository
+                    .GetReservationsByPropertyId(property.PropertyId, cancellationToken);
+                
+                var hasConfirmedReservation = activeReservations.Any(r => 
+                    r.ReservationId != reservationId && // Exclude current reservation
+                    r.Status == "Confirmed");
+
+                // Update property status based on reservation status
                 if (reservationDto.Status == "Confirmed")
                 {
                     property.Status = "Reserved";
                 }
-                // If reservation is declined or cancelled, ensure property is Available
                 else if (reservationDto.Status == "Declined" || reservationDto.Status == "Cancelled")
                 {
-                    property.Status = "Available";
+                    // Only set to Available if there are no other confirmed reservations
+                    if (!hasConfirmedReservation)
+                    {
+                        property.Status = "Available";
+                    }
                 }
 
-                // Save changes
+                // Only update the reservation since property is already tracked
                 repositoryManager.ReservationRepository.Update(existingReservation);
                 var result = await repositoryManager.UnitOfWork.SaveChangesAsync(cancellationToken);
 
