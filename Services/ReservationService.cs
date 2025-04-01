@@ -22,12 +22,23 @@ namespace Services
 
 				// Check if property exists and is available
 				var property = await repositoryManager.PropertyRepository.GetById(reservationDto.PropertyId, cancellationToken);
-				if (property == null || property.Status != "Available")
+				Console.WriteLine($"Property check - ID: {reservationDto.PropertyId}, Found: {property != null}, Status: {property?.Status}");
+				
+				if (property == null)
 				{
 					return new GeneralResponseDto
 					{
 						IsSuccess = false,
-						Message = "Property not found or is unavailable."
+						Message = $"Property with ID {reservationDto.PropertyId} not found."
+					};
+				}
+
+				if (property.Status != "Available")
+				{
+					return new GeneralResponseDto
+					{
+						IsSuccess = false,
+						Message = $"Property is not available. Current status: {property.Status}"
 					};
 				}
 
@@ -61,6 +72,8 @@ namespace Services
 			}
 			catch (Exception ex)
 			{
+				Console.WriteLine($"Error in Create Reservation: {ex.Message}");
+				Console.WriteLine($"Stack trace: {ex.StackTrace}");
 				return new GeneralResponseDto
 				{
 					IsSuccess = false,
@@ -88,6 +101,7 @@ namespace Services
 			{
 				Id = r.ReservationId,
 				PropertyId = r.PropertyId,
+				PropertyTitle = r.Property != null ? r.Property.Title : string.Empty,
 				AccountId = r.AccountId,
 				Status = r.Status,
 				StartDate = r.StartDate,
@@ -100,7 +114,16 @@ namespace Services
 		public async Task<ReservationDto> GetById(int reservationId, CancellationToken cancellationToken = default)
 		{
 			var reservation = await repositoryManager.ReservationRepository.GetById(reservationId, cancellationToken);
-			return reservation.Adapt<ReservationDto>();
+			return new ReservationDto
+			{
+				Id = reservation.ReservationId,
+				PropertyId = reservation.PropertyId,
+				PropertyTitle = reservation.Property?.Title ?? string.Empty,
+				AccountId = reservation.AccountId,
+				Status = reservation.Status,
+				StartDate = reservation.StartDate,
+				EndDate = reservation.EndDate
+			};
 		}
 
         public async Task<GeneralResponseDto> Update(int reservationId, ReservationUpdateDto reservationDto, CancellationToken cancellationToken = default)
