@@ -7,7 +7,38 @@ namespace Services
 	//public class ReservationService(IRepositoryManager repositoryManager) : IReservationService
 	public class PropertyService(IRepositoryManager repositoryManager) : IPropertyService
 	{
+		private async Task CheckAndUpdatePropertyStatus(Property property, CancellationToken cancellationToken)
+		{
+			var expiredReservations = await repositoryManager.ReservationRepository
+				.GetExpiredReservations(property.PropertyId, cancellationToken);
 
+			if (expiredReservations.Any())
+			{
+				// Update all expired reservations to "Completed"
+				foreach (var reservation in expiredReservations)
+				{
+					reservation.Status = "Completed";
+					repositoryManager.ReservationRepository.UpdateReservation(reservation);
+				}
+
+				// Check if there are any active (non-expired) confirmed reservations
+				var activeReservations = await repositoryManager.ReservationRepository
+					.GetReservationsByPropertyId(property.PropertyId, cancellationToken);
+
+				var hasActiveConfirmedReservations = activeReservations.Any(r => 
+					r.Status == "Confirmed" && 
+					r.EndDate >= DateTime.UtcNow);
+
+				// If no active confirmed reservations, set property status to Available
+				if (!hasActiveConfirmedReservations)
+				{
+					property.Status = "Available";
+					repositoryManager.PropertyRepository.UpdateProperty(property);
+				}
+
+				await repositoryManager.UnitOfWork.SaveChangesAsync(cancellationToken);
+			}
+		}
 
 		public async Task<GeneralResponseDto> Create(PropertyCreateDto propertyDto, CancellationToken cancellationToken)
 		{
@@ -37,14 +68,19 @@ namespace Services
 			}
 		}
 
-
 		public async Task<IEnumerable<PropertyDto>> GetAll(CancellationToken cancellationToken = default)
 		{
 			var properties = await repositoryManager.PropertyRepository.GetAllProperties(cancellationToken);
 
+			// Check and update status for each property
+			foreach (var property in properties)
+			{
+				await CheckAndUpdatePropertyStatus(property, cancellationToken);
+			}
+
 			var propertyDtos = properties.Select(p => new PropertyDto
 			{
-				PropertyId = p.PropertyId, // Ensure you are mapping the PropertyId
+				PropertyId = p.PropertyId,
 				Title = p.Title,
 				Description = p.Description,
 				Address = p.Address,
@@ -56,13 +92,11 @@ namespace Services
 				{
 					Id = img.ImageId,
 					ImageUrl = img.ImageUrl,
-					//opertyId = (int)img.PropertyId
 				}).ToList() ?? new List<PropertyImageDto>()
 			});
 
 			return propertyDtos;
 		}
-
 
 		public async Task<GeneralResponseDto> GetById(int propertyId, CancellationToken cancellationToken = default)
 		{
@@ -74,9 +108,11 @@ namespace Services
 				{
 					IsSuccess = false,
 					Message = $"Property with ID {propertyId} not found."
-					// PropertyId is omitted here
 				};
 			}
+
+			// Check and update property status
+			await CheckAndUpdatePropertyStatus(property, cancellationToken);
 
 			var propertyDto = new PropertyDto
 			{
@@ -103,118 +139,113 @@ namespace Services
 			};
 		}
 
-        public async Task<GeneralResponseDto> Update(int propertyId, PropertyUpdateDto propertyDto, CancellationToken cancellationToken = default)
-        {
-            try
-            {
-                var property = await repositoryManager.PropertyRepository.GetById(propertyId, cancellationToken);
-                if (property == null)
-                {
-                    return new GeneralResponseDto { IsSuccess = false, Message = "Property not found." };
-                }
+		public async Task<GeneralResponseDto> Update(int propertyId, PropertyUpdateDto propertyDto, CancellationToken cancellationToken = default)
+		{
+			try
+			{
+				var property = await repositoryManager.PropertyRepository.GetById(propertyId, cancellationToken);
+				if (property == null)
+				{
+					return new GeneralResponseDto { IsSuccess = false, Message = "Property not found." };
+				}
 
-                // Update property fields
-                property.Title = propertyDto.Title;
-                property.Description = propertyDto.Description;
-                property.Address = propertyDto.Address;
-                property.Price = propertyDto.Price;
-                property.PropertyType = propertyDto.PropertyType;
-                property.Area = propertyDto.Area;
+				// Update property fields
+				property.Title = propertyDto.Title;
+				property.Description = propertyDto.Description;
+				property.Address = propertyDto.Address;
+				property.Price = propertyDto.Price;
+				property.PropertyType = propertyDto.PropertyType;
+				property.Area = propertyDto.Area;
 
-                // Only update status if there are no confirmed reservations
-                if (propertyDto.Status != property.Status)
-                {
-                    var hasConfirmedReservations = await repositoryManager.PropertyRepository.HasActiveReservations(propertyId, cancellationToken);
-                    if (!hasConfirmedReservations)
-                    {
-                        property.Status = propertyDto.Status;
-                    }
-                    else
-                    {
-                        return new GeneralResponseDto 
-                        { 
-                            IsSuccess = false, 
-                            Message = "Cannot update property status because it has active reservations." 
-                        };
-                    }
-                }
+				// Only update status if there are no confirmed reservations
+				if (propertyDto.Status != property.Status)
+				{
+					var hasConfirmedReservations = await repositoryManager.PropertyRepository.HasActiveReservations(propertyId, cancellationToken);
+					if (!hasConfirmedReservations)
+					{
+						property.Status = propertyDto.Status;
+					}
+					else
+					{
+						return new GeneralResponseDto 
+						{ 
+							IsSuccess = false, 
+							Message = "Cannot update property status because it has active reservations." 
+						};
+					}
+				}
 
-                repositoryManager.PropertyRepository.UpdateProperty(property);
-                var result = await repositoryManager.UnitOfWork.SaveChangesAsync(cancellationToken);
+				repositoryManager.PropertyRepository.UpdateProperty(property);
+				var result = await repositoryManager.UnitOfWork.SaveChangesAsync(cancellationToken);
 
-                if (result <= 0)
-                {
-                    return new GeneralResponseDto 
-                    { 
-                        IsSuccess = false, 
-                        Message = "No changes were made to the property." 
-                    };
-                }
+				if (result <= 0)
+				{
+					return new GeneralResponseDto 
+					{ 
+						IsSuccess = false, 
+						Message = "No changes were made to the property." 
+					};
+				}
 
-                return new GeneralResponseDto 
-                { 
-                    IsSuccess = true, 
-                    Message = "Property updated successfully!" 
-                };
-            }
-            catch (Exception ex)
-            {
-                return new GeneralResponseDto
-                {
-                    IsSuccess = false,
-                    Message = $"Error while updating the property: {ex.Message}"
-                };
-            }
-        }
+				return new GeneralResponseDto 
+				{ 
+					IsSuccess = true, 
+					Message = "Property updated successfully!" 
+				};
+			}
+			catch (Exception ex)
+			{
+				return new GeneralResponseDto
+				{
+					IsSuccess = false,
+					Message = $"Error while updating the property: {ex.Message}"
+				};
+			}
+		}
 
+		public async Task<GeneralResponseDto> Delete(int propertyId, CancellationToken cancellationToken = default)
+		{
+			try
+			{
+				var property = await repositoryManager.PropertyRepository.GetById(propertyId, cancellationToken);
+				if (property == null)
+				{
+					return new GeneralResponseDto
+					{
+						IsSuccess = false,
+						Message = "Property not found."
+					};
+				}
 
+				// Enable change tracking for the delete operation
+				repositoryManager.PropertyRepository.Delete(property);
+				var result = await repositoryManager.UnitOfWork.SaveChangesAsync(cancellationToken);
 
-        public async Task<GeneralResponseDto> Delete(int propertyId, CancellationToken cancellationToken = default)
-        {
-            try
-            {
-                var property = await repositoryManager.PropertyRepository.GetById(propertyId, cancellationToken);
-                if (property == null)
-                {
-                    return new GeneralResponseDto
-                    {
-                        IsSuccess = false,
-                        Message = "Property not found."
-                    };
-                }
-
-                // Enable change tracking for the delete operation
-                repositoryManager.PropertyRepository.Delete(property);
-                var result = await repositoryManager.UnitOfWork.SaveChangesAsync(cancellationToken);
-
-                if (result > 0)
-                {
-                    return new GeneralResponseDto
-                    {
-                        IsSuccess = true,
-                        Message = "Property and all related data successfully deleted."
-                    };
-                }
-                else
-                {
-                    return new GeneralResponseDto
-                    {
-                        IsSuccess = false,
-                        Message = "No changes were made to the database."
-                    };
-                }
-            }
-            catch (Exception ex)
-            {
-                return new GeneralResponseDto
-                {
-                    IsSuccess = false,
-                    Message = $"Error deleting property: {ex.Message}"
-                };
-            }
-        }
-
-
-
-    }
+				if (result > 0)
+				{
+					return new GeneralResponseDto
+					{
+						IsSuccess = true,
+						Message = "Property and all related data successfully deleted."
+					};
+				}
+				else
+				{
+					return new GeneralResponseDto
+					{
+						IsSuccess = false,
+						Message = "No changes were made to the database."
+					};
+				}
+			}
+			catch (Exception ex)
+			{
+				return new GeneralResponseDto
+				{
+					IsSuccess = false,
+					Message = $"Error deleting property: {ex.Message}"
+				};
+			}
+		}
+	}
 }

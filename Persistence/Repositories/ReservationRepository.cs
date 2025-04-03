@@ -44,6 +44,16 @@ namespace MyProperty.API.Infrastructure.Persistence.Persistence.Repositories
 			return await FindByCondition(r => r.PropertyId == propertyId).ToListAsync(cancellationToken);
 		}
 
+		public async Task<IEnumerable<Reservation>> GetExpiredReservations(int propertyId, CancellationToken cancellationToken = default)
+		{
+			var currentDate = DateTime.UtcNow;
+			return await FindByCondition(r => 
+				r.PropertyId == propertyId && 
+				r.Status == "Confirmed" && 
+				r.EndDate < currentDate)
+				.ToListAsync(cancellationToken);
+		}
+
 		public Task<IEnumerable<Reservation>> GetReservationsByUserId(int userId, CancellationToken cancellationToken = default)
 		{
 			throw new NotImplementedException();

@@ -9,6 +9,7 @@ namespace MyProperty.API.Core.Domain.Repositories
         Task<Reservation> GetById(int reservationId, CancellationToken cancellationToken = default);
         Task<IEnumerable<Reservation>> GetReservationsByUserId(int userId, CancellationToken cancellationToken = default);
         Task<IEnumerable<Reservation>> GetReservationsByPropertyId(int propertyId, CancellationToken cancellationToken = default);
+        Task<IEnumerable<Reservation>> GetExpiredReservations(int propertyId, CancellationToken cancellationToken = default);
 
 		Task<Reservation?> GetExistingReservation(string accountId, int propertyId, CancellationToken cancellationToken);
 
