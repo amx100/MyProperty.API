@@ -12,8 +12,8 @@ using Persistence;
 namespace Persistence.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20250203104956_nova1")]
-    partial class nova1
+    [Migration("20250402235630_Initial")]
+    partial class Initial
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -116,7 +116,7 @@ namespace Persistence.Migrations
                         {
                             Id = "595af844-b3f7-4d70-87ca-eb9c08a2368a",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "07925caa-19bb-41db-8b11-abbdd50237c6",
+                            ConcurrencyStamp = "7573d370-db25-4a9d-a86d-60597ca05d8f",
                             Email = "admin@test.com",
                             EmailConfirmed = true,
                             FirstName = "Admin",
@@ -127,7 +127,7 @@ namespace Persistence.Migrations
                             PhoneNumberConfirmed = false,
                             RefreshToken = "",
                             RefreshTokenExpiryTime = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            SecurityStamp = "d513ed9f-9d21-463c-b47f-b42a927068b5",
+                            SecurityStamp = "b8c006dc-a99d-4e56-b4eb-40b325dcaa90",
                             TwoFactorEnabled = false,
                             UserName = "admin@test.com"
                         },
@@ -135,7 +135,7 @@ namespace Persistence.Migrations
                         {
                             Id = "4334dd38-cdd9-4ba8-99c6-856220356d4a",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "3210ea08-6c15-43dd-8e38-74979305def6",
+                            ConcurrencyStamp = "30b75500-a439-4293-825b-bb2a4aa95a63",
                             Email = "user@test.com",
                             EmailConfirmed = true,
                             FirstName = "User",
@@ -146,7 +146,7 @@ namespace Persistence.Migrations
                             PhoneNumberConfirmed = false,
                             RefreshToken = "",
                             RefreshTokenExpiryTime = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            SecurityStamp = "b0332e46-1159-419d-a03c-03903c39d4c3",
+                            SecurityStamp = "8bb871b5-f7fd-46e9-83d7-e9bbbbe8d7a4",
                             TwoFactorEnabled = false,
                             UserName = "user@test.com"
                         },
@@ -154,7 +154,7 @@ namespace Persistence.Migrations
                         {
                             Id = "4cda5ea1-47a4-4383-9a6c-b581d13cc961",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "9a4290ec-41d2-446d-bb7c-ea4637f1a632",
+                            ConcurrencyStamp = "f220cbcb-30b7-42c2-b413-9ae1f28082f3",
                             Email = "owner@test.com",
                             EmailConfirmed = true,
                             FirstName = "Owner",
@@ -165,7 +165,7 @@ namespace Persistence.Migrations
                             PhoneNumberConfirmed = false,
                             RefreshToken = "",
                             RefreshTokenExpiryTime = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            SecurityStamp = "879629d2-df5c-4ec3-9070-8dfc665869c1",
+                            SecurityStamp = "8abcc78d-e26f-43b9-91ae-5705471614d2",
                             TwoFactorEnabled = false,
                             UserName = "owner@test.com"
                         },
@@ -173,7 +173,7 @@ namespace Persistence.Migrations
                         {
                             Id = "7ada92d0-de96-45f7-a0f8-dafba1830724",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "3c791b63-f7a0-4b40-9885-3eb574ef64e8",
+                            ConcurrencyStamp = "5e1668f5-981a-42da-9ee8-853aa9f6437b",
                             Email = "buyer@test.com",
                             EmailConfirmed = true,
                             FirstName = "Buyer",
@@ -184,7 +184,7 @@ namespace Persistence.Migrations
                             PhoneNumberConfirmed = false,
                             RefreshToken = "",
                             RefreshTokenExpiryTime = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            SecurityStamp = "373b6387-3f99-4cda-a9c2-77e70d196e90",
+                            SecurityStamp = "a618347f-ad15-4619-b9b9-e02cafdfbbed",
                             TwoFactorEnabled = false,
                             UserName = "buyer@test.com"
                         });

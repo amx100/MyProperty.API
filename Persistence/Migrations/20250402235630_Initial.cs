@@ -9,7 +9,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace Persistence.Migrations
 {
     /// <inheritdoc />
-    public partial class nova1 : Migration
+    public partial class Initial : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -308,10 +308,10 @@ namespace Persistence.Migrations
                 columns: new[] { "Id", "AccessFailedCount", "ConcurrencyStamp", "Email", "EmailConfirmationToken", "EmailConfirmed", "FirstName", "LastName", "LockoutEnabled", "LockoutEnd", "MobileNumber", "NormalizedEmail", "NormalizedUserName", "PasswordHash", "PasswordResetToken", "PhoneNumber", "PhoneNumberConfirmed", "RefreshToken", "RefreshTokenExpiryTime", "SecurityStamp", "TwoFactorEnabled", "UserName" },
                 values: new object[,]
                 {
-                    { "4334dd38-cdd9-4ba8-99c6-856220356d4a", 0, "3210ea08-6c15-43dd-8e38-74979305def6", "user@test.com", null, true, "User", "User", false, null, null, "USER@TEST.COM", "USER@TEST.COM", null, null, null, false, "", new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "b0332e46-1159-419d-a03c-03903c39d4c3", false, "user@test.com" },
-                    { "4cda5ea1-47a4-4383-9a6c-b581d13cc961", 0, "9a4290ec-41d2-446d-bb7c-ea4637f1a632", "owner@test.com", null, true, "Owner", "Owner", false, null, null, "OWNER@TEST.COM", "OWNER@TEST.COM", null, null, null, false, "", new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "879629d2-df5c-4ec3-9070-8dfc665869c1", false, "owner@test.com" },
-                    { "595af844-b3f7-4d70-87ca-eb9c08a2368a", 0, "07925caa-19bb-41db-8b11-abbdd50237c6", "admin@test.com", null, true, "Admin", "Admin", false, null, null, "ADMIN@TEST.COM", "ADMIN@TEST.COM", null, null, null, false, "", new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "d513ed9f-9d21-463c-b47f-b42a927068b5", false, "admin@test.com" },
-                    { "7ada92d0-de96-45f7-a0f8-dafba1830724", 0, "3c791b63-f7a0-4b40-9885-3eb574ef64e8", "buyer@test.com", null, true, "Buyer", "Buyer", false, null, null, "BUYER@TEST.COM", "BUYER@TEST.COM", null, null, null, false, "", new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "373b6387-3f99-4cda-a9c2-77e70d196e90", false, "buyer@test.com" }
+                    { "4334dd38-cdd9-4ba8-99c6-856220356d4a", 0, "30b75500-a439-4293-825b-bb2a4aa95a63", "user@test.com", null, true, "User", "User", false, null, null, "USER@TEST.COM", "USER@TEST.COM", null, null, null, false, "", new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "8bb871b5-f7fd-46e9-83d7-e9bbbbe8d7a4", false, "user@test.com" },
+                    { "4cda5ea1-47a4-4383-9a6c-b581d13cc961", 0, "f220cbcb-30b7-42c2-b413-9ae1f28082f3", "owner@test.com", null, true, "Owner", "Owner", false, null, null, "OWNER@TEST.COM", "OWNER@TEST.COM", null, null, null, false, "", new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "8abcc78d-e26f-43b9-91ae-5705471614d2", false, "owner@test.com" },
+                    { "595af844-b3f7-4d70-87ca-eb9c08a2368a", 0, "7573d370-db25-4a9d-a86d-60597ca05d8f", "admin@test.com", null, true, "Admin", "Admin", false, null, null, "ADMIN@TEST.COM", "ADMIN@TEST.COM", null, null, null, false, "", new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "b8c006dc-a99d-4e56-b4eb-40b325dcaa90", false, "admin@test.com" },
+                    { "7ada92d0-de96-45f7-a0f8-dafba1830724", 0, "5e1668f5-981a-42da-9ee8-853aa9f6437b", "buyer@test.com", null, true, "Buyer", "Buyer", false, null, null, "BUYER@TEST.COM", "BUYER@TEST.COM", null, null, null, false, "", new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "a618347f-ad15-4619-b9b9-e02cafdfbbed", false, "buyer@test.com" }
                 });
 
             migrationBuilder.InsertData(
