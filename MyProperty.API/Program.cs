@@ -10,6 +10,7 @@ using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using MyProperty.API.Core.Domain.Repositories.Common;
 using MyProperty.API.Infrastructure.Persistence.Persistence.Repositories.Common;
+using Npgsql.EntityFrameworkCore.PostgreSQL;
 using Persistence;
 using Services;
 using System.Text;
@@ -51,11 +52,26 @@ void ConfigureServices(IServiceCollection services)
 
 void ConfigureDatabase(IServiceCollection services, IConfiguration configuration)
 {
-	var serverVersion = new MySqlServerVersion(new Version(8, 0, 26));
+	var environment = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") ?? "Development";
+	string connectionString = configuration.GetConnectionString("MainDB");
+	
 	services.AddDbContextPool<DataContext>(options =>
 	{
-		options.UseMySql(configuration.GetConnectionString("MainDB"), serverVersion,
-			mysqlOptions => { mysqlOptions.EnableRetryOnFailure(1, TimeSpan.FromSeconds(5), null); });
+		if (environment == "Production")
+		{
+			// PostgreSQL za production
+			options.UseNpgsql(connectionString, npgsqlOptions =>
+			{
+				npgsqlOptions.EnableRetryOnFailure(1, TimeSpan.FromSeconds(5), null);
+			});
+		}
+		else
+		{
+			// MySQL za development
+			var serverVersion = new MySqlServerVersion(new Version(8, 0, 26));
+			options.UseMySql(connectionString, serverVersion,
+				mysqlOptions => { mysqlOptions.EnableRetryOnFailure(1, TimeSpan.FromSeconds(5), null); });
+		}
 	});
 }
 
